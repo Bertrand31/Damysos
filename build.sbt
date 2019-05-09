@@ -15,13 +15,8 @@ libraryDependencies ++= Seq(
 scalacOptions ++= Seq("-deprecation", "-feature")
 
 javaOptions ++= Seq(
-  // The permanent space is where the classes, methods, internalized strings,
-  // and similar objects used by the VM are stored and never deallocated
-  "-XX:MaxPermSize=2048M",
   "-XX:+CMSClassUnloadingEnabled" // Enable class unloading under the CMS GC
 )
 
 // Test suite settings
 fork in Test := true
-// Show runtime of tests
-testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
