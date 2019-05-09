@@ -49,8 +49,8 @@ case class Damysos(
     def getMatches(path: List[Char], trie: Node) = trie.findLeaf(path.take(precision)).collect({
       case node: Node => node.toList
     }).getOrElse(List())
-    val latitudeMatches = getMatches(latitudePath(coordinates), this.latitudeGeoTrie)
-    val longitudeMatches = getMatches(longitudePath(coordinates), this.longitudeGeoTrie)
+    val latitudeMatches = getMatches(latitudePath(coordinates), latitudeGeoTrie)
+    val longitudeMatches = getMatches(longitudePath(coordinates), longitudeGeoTrie)
     latitudeMatches intersect longitudeMatches
   }
 
