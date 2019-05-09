@@ -1,4 +1,4 @@
-name := "Proximus"
+name := "Damysos"
 
 version := "1"
 

@@ -1,6 +1,6 @@
-# Proximus
+# Damysos
 
-Proximus is an experiment stemming from the idea that tries could be used to store points in a
+Damysos is an experiment stemming from the idea that tries could be used to store points in a
 n-dimensional space in a way that would allow for fast querying of "neighbouring" points.
 
 In order to achieve this, we first have to turn each coordinate or every point into a base 4

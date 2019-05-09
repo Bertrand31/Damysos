@@ -1,4 +1,4 @@
-package proximus
+package damysos
 
 import scala.annotation.tailrec
 

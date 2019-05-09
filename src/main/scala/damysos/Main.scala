@@ -1,4 +1,4 @@
-package proximus
+package damysos
 
 case class Coordinates(
   latitude: Double,

@@ -1,6 +1,6 @@
-package proximus
+package damysos
 
-case class Proximus(
+case class Damysos(
   private val latitudeGeoTrie: Node = Node(),
   private val longitudeGeoTrie: Node = Node()
 ) {
@@ -33,7 +33,7 @@ case class Proximus(
     latitudeMatches intersect longitudeMatches
   }
 
-  def :+(item: PointOfInterst): Proximus =
+  def :+(item: PointOfInterst): Damysos =
     this.copy(
       latitudeGeoTrie = (this.latitudeGeoTrie.insertAtPath(item, item.coordinates.latitudePath)),
       longitudeGeoTrie = (this.longitudeGeoTrie.insertAtPath(item, item.coordinates.longitudePath))
@@ -41,5 +41,5 @@ case class Proximus(
 
   // TraversableOnce encompasses both normal collections and Iterator. So this one method can be
   // used either with a normal collection or a lazy one, like reading from a file line by line.
-  def ++(items: TraversableOnce[PointOfInterst]): Proximus = items.foldLeft(this)(_ :+ _)
+  def ++(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ :+ _)
 }
