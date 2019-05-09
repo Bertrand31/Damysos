@@ -42,7 +42,7 @@ class DamysosSpec extends FlatSpec {
     }
   }
 
-  it should "find the neighbouring points" in {
+  it should "find the neighboring points" in {
 
     val franceMatches = PerfUtils.time[List[PointOfInterst]]("Searching in France dataset") {
       val paris = Coordinates(2.3522219, 48.856614)

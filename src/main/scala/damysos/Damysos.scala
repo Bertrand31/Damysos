@@ -20,13 +20,13 @@ case class Damysos(
     coordinates: Coordinates,
     precision: Int = DefaultPrecision
   ): List[PointOfInterst] = {
-    val looseLatitudePath = coordinates.latitudePath.take(precision)
-    val latitudeMatches = this.latitudeGeoTrie.findLeaf(looseLatitudePath) match {
+    val partialLatitudePath = coordinates.latitudePath.take(precision)
+    val latitudeMatches = this.latitudeGeoTrie.findLeaf(partialLatitudePath) match {
       case Some(node: Node) => node.toList
       case _                => List()
     }
-    val looseLongitudePath = coordinates.longitudePath.take(precision)
-    val longitudeMatches = this.longitudeGeoTrie.findLeaf(looseLongitudePath) match {
+    val partialLongitudePath = coordinates.longitudePath.take(precision)
+    val longitudeMatches = this.longitudeGeoTrie.findLeaf(partialLongitudePath) match {
       case Some(node: Node) => node.toList
       case _                => List()
     }
