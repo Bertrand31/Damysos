@@ -23,15 +23,14 @@ case class Damysos(
       .reverse
       .mkString
 
-  private def latitudePath(coordinates: Coordinates): Seq[Char] =
-    toPaddedBase(TreeBreadth, coordinates.latitude + 90)
-      .toCharArray
-      .toList
+  private def makePath(minValue: Int, coordinate: Double): List[Char] =
+    toPaddedBase(TreeBreadth, coordinate - minValue).toCharArray.toList
 
-  private def longitudePath(coordinates: Coordinates): Seq[Char] =
-    toPaddedBase(TreeBreadth, coordinates.longitude + 180)
-      .toCharArray
-      .toList
+  private def latitudePath(coordinates: Coordinates): List[Char] =
+    makePath(-90, coordinates.latitude)
+
+  private def longitudePath(coordinates: Coordinates): List[Char] =
+    makePath(-180, coordinates.longitude)
 
   private val DefaultPrecision = 6
 
@@ -39,25 +38,19 @@ case class Damysos(
 
   // We arbitrarily use the latitudeGeoTrie for this operation, but either would be fine
   def contains(point: PointOfInterst): Boolean =
-    this.latitudeGeoTrie.findLeaf(this.latitudePath(point.coordinates)) match {
-      case Some(leaf: Leaf) => leaf.locations contains point
-      case _                => false
-    }
+    this.latitudeGeoTrie.findLeaf(this.latitudePath(point.coordinates)).collect({
+      case leaf: Leaf => leaf.locations.contains(point)
+    }).getOrElse(false)
 
   def findSurrounding(
     coordinates: Coordinates,
     precision: Int = DefaultPrecision
   ): List[PointOfInterst] = {
-    val partialLatitudePath = this.latitudePath(coordinates).take(precision)
-    val latitudeMatches = this.latitudeGeoTrie.findLeaf(partialLatitudePath) match {
-      case Some(node: Node) => node.toList
-      case _                => List()
-    }
-    val partialLongitudePath = this.longitudePath(coordinates).take(precision)
-    val longitudeMatches = this.longitudeGeoTrie.findLeaf(partialLongitudePath) match {
-      case Some(node: Node) => node.toList
-      case _                => List()
-    }
+    def getMatches(path: List[Char], trie: Node) = trie.findLeaf(path.take(precision)).collect({
+      case node: Node => node.toList
+    }).getOrElse(List())
+    val latitudeMatches = getMatches(latitudePath(coordinates), this.latitudeGeoTrie)
+    val longitudeMatches = getMatches(longitudePath(coordinates), this.longitudeGeoTrie)
     latitudeMatches intersect longitudeMatches
   }
 
