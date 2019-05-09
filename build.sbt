@@ -5,7 +5,7 @@ version := "1"
 scalaVersion := "2.12.8"
 
 // SBT scoverage settings
-coverageMinimum := 80
+coverageMinimum := 90
 coverageFailOnMinimum := true
 
 resolvers ++= Seq(
