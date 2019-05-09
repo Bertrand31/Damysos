@@ -13,27 +13,30 @@ case class Proximus(
   def contains(point: PointOfInterst): Boolean =
     latitudeGeoTrie.findLeaf(point.coordinates.latitudePath) match {
       case Some(leaf: Leaf) => leaf.locations contains point
-      case _ => false
+      case _                => false
     }
 
-  def findSurrounding(coordinates: Coordinates, precision: Int = DefaultPrecision): List[PointOfInterst] = {
+  def findSurrounding(
+    coordinates: Coordinates,
+    precision: Int = DefaultPrecision
+  ): List[PointOfInterst] = {
     val looseLatitudePath = coordinates.latitudePath.take(precision)
     val latitudeMatches = this.latitudeGeoTrie.findLeaf(looseLatitudePath) match {
       case Some(node: Node) => node.toList
-      case _ => List()
+      case _                => List()
     }
     val looseLongitudePath = coordinates.longitudePath.take(precision)
     val longitudeMatches = this.longitudeGeoTrie.findLeaf(looseLongitudePath) match {
       case Some(node: Node) => node.toList
-      case _ => List()
+      case _                => List()
     }
     latitudeMatches intersect longitudeMatches
   }
 
   def :+(item: PointOfInterst): Proximus =
     this.copy(
-      latitudeGeoTrie=(this.latitudeGeoTrie.insertAtPath(item, item.coordinates.latitudePath)),
-      longitudeGeoTrie=(this.longitudeGeoTrie.insertAtPath(item, item.coordinates.longitudePath))
+      latitudeGeoTrie = (this.latitudeGeoTrie.insertAtPath(item, item.coordinates.latitudePath)),
+      longitudeGeoTrie = (this.longitudeGeoTrie.insertAtPath(item, item.coordinates.longitudePath))
     )
 
   // TraversableOnce encompasses both normal collections and Iterator. So this one method can be

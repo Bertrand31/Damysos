@@ -24,14 +24,10 @@ case class Coordinates(
       .mkString
 
   def latitudePath(): Seq[Char] =
-    toPaddedBase4(latitude + 90)
-      .toCharArray
-      .toList
+    toPaddedBase4(latitude + 90).toCharArray.toList
 
   def longitudePath(): Seq[Char] =
-    toPaddedBase4(longitude + 180)
-      .toCharArray
-      .toList
+    toPaddedBase4(longitude + 180).toCharArray.toList
 }
 
 case class PointOfInterst(
