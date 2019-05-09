@@ -5,17 +5,21 @@ case class Coordinates(
   longitude: Double
 ) {
 
-  private def toBase(base: Int, number: Long): String =
-    BigInt(Math.round(number)).toString(base)
+  private def toBase(base: Int, number: Long): String = BigInt(number).toString(base)
 
-  private val Breadth = 4
-  private val TreeDepth = toBase(Breadth, 360 * 1000000).length
+  // The lower the breadth, the deeper the tree and thus, the more precision levels available.
+  private val TreeBreadth = 4
+  private val GPSPrecision = 1000000
+  // 360 is the maximum value a GPS coordinate can take. So it is the trie depth we need.
+  private val TreeDepth = toBase(TreeBreadth, 360 * GPSPrecision).length
 
   // Returns an 7-characters-long base-32 number as a String
   private def toPaddedBase4(number: Double): String =
-    toBase(Breadth, (number * 1000000).toLong)
+    toBase(TreeBreadth, Math.round(number * GPSPrecision.toDouble))
       .reverse
-      .padTo(TreeDepth, "0") // A base 4 number comprised between 0 and 360 is 26 chars long maximmum
+      // We need to pad the numbers to ensure all the paths have the same length i.e. all of the
+      // trie's leaves are on the same level.
+      .padTo(TreeDepth, "0")
       .reverse
       .mkString
 
