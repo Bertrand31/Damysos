@@ -8,10 +8,6 @@ scalaVersion := "2.12.8"
 coverageMinimum := 90
 coverageFailOnMinimum := true
 
-resolvers ++= Seq(
-  "Spark Packages Repo" at "http://dl.bintray.com/spark-packages/maven"
-)
-
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.5"
 )
