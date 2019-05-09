@@ -9,3 +9,11 @@ stringified versions share, and this, going from left to right.
 
 For example, if city 1 is "aaa", city 2 is "aab" and city 3 is "a81", we can tell that city 1 is
 closer to city 2 than city 3 and city 3 is closer to city 1 than city 3.
+
+This way, in order to get the neighbouring points of a GPS coordinate, we only have to compute the
+"trie path" for those coordinates, and descend the trie at the desired depth (the level of
+precision, or "zoom"). Then, we take all the leaves below that point.
+
+What's interesting in this approach, in my opinion, resides in the fact that nowhere in the code we
+are actually commparing GPS coordinates, calculating distances etc. The data structure itself, in
+this case a Trie, _is_ the logic.
