@@ -13,7 +13,7 @@ final case class Node(children: Map[Char, GeoTrie] = Map()) extends GeoTrie {
     })
 
   @tailrec
-  def findLeaf(path: Seq[Char], trie: Option[GeoTrie] = Some(this)): Option[GeoTrie] =
+  def findLeaf(path: List[Char], trie: Option[GeoTrie] = Some(this)): Option[GeoTrie] =
     path match {
       case head +: Nil =>
         trie match {
@@ -27,7 +27,7 @@ final case class Node(children: Map[Char, GeoTrie] = Map()) extends GeoTrie {
         }
     }
 
-  def insertAtPath(item: PointOfInterst, path: Seq[Char], node: Node = this): Node =
+  def insertAtPath(item: PointOfInterst, path: List[Char], node: Node = this): Node =
     path match {
       case head +: Nil => {
         val newLeaf = node.children.get(head) match {

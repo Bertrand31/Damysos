@@ -9,13 +9,13 @@ case class Damysos(
 
   // The lower the breadth, the deeper the tree and thus, the more precision levels available.
   private val TreeBreadth = 4
-  private val GPSPrecision = 1000000
+  private val GPSDecimals = 6
   // 360 is the maximum value a GPS coordinate can take. So it is the trie depth we need.
-  private val TreeDepth = MathUtils.toBase(TreeBreadth, 360 * GPSPrecision).length
+  private val TreeDepth = MathUtils.toBase(TreeBreadth, 360L * Math.pow(10, GPSDecimals).toLong).length
 
-  // Returns an 7-characters-long base-32 number as a String
+  // Returns an `TreeDepth`-characters-long base-`TreeBreadth` number as a String
   private def toPaddedBase(base: Int, number: Double): String =
-    MathUtils.toBase(base, Math.round(number * GPSPrecision.toDouble))
+    MathUtils.toBase(base, Math.round(number * Math.pow(10, GPSDecimals).toLong))
       .reverse
       // We need to pad the numbers to ensure all the paths have the same length i.e. all of the
       // trie's leaves are on the same level.
@@ -38,7 +38,7 @@ case class Damysos(
 
   // We arbitrarily use the latitudeGeoTrie for this operation, but either would be fine
   def contains(point: PointOfInterst): Boolean =
-    this.latitudeGeoTrie.findLeaf(this.latitudePath(point.coordinates)).collect({
+    latitudeGeoTrie.findLeaf(latitudePath(point.coordinates)).collect({
       case leaf: Leaf => leaf.locations.contains(point)
     }).getOrElse(false)
 
@@ -46,9 +46,8 @@ case class Damysos(
     coordinates: Coordinates,
     precision: Int = DefaultPrecision
   ): List[PointOfInterst] = {
-    def getMatches(path: List[Char], trie: Node) = trie.findLeaf(path.take(precision)).collect({
-      case node: Node => node.toList
-    }).getOrElse(List())
+    def getMatches(path: List[Char], trie: Node) = trie.findLeaf(path.take(precision))
+      .collect({ case node: Node => node.toList }).getOrElse(List())
     val latitudeMatches = getMatches(latitudePath(coordinates), latitudeGeoTrie)
     val longitudeMatches = getMatches(longitudePath(coordinates), longitudeGeoTrie)
     latitudeMatches intersect longitudeMatches
@@ -56,8 +55,8 @@ case class Damysos(
 
   def :+(item: PointOfInterst): Damysos =
     this.copy(
-      latitudeGeoTrie = (this.latitudeGeoTrie.insertAtPath(item, latitudePath(item.coordinates))),
-      longitudeGeoTrie = (this.longitudeGeoTrie.insertAtPath(item, longitudePath(item.coordinates)))
+      latitudeGeoTrie = (latitudeGeoTrie.insertAtPath(item, latitudePath(item.coordinates))),
+      longitudeGeoTrie = (longitudeGeoTrie.insertAtPath(item, longitudePath(item.coordinates)))
     )
 
   // TraversableOnce encompasses both normal collections and Iterator. So this one method can be
