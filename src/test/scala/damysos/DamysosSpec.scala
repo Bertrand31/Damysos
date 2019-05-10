@@ -51,6 +51,15 @@ class DamysosSpec extends FlatSpec {
     assert(worldMatches.length == 13)
   }
 
+  it should "return a list of all the contents" in {
+
+    val paris = PointOfInterst("Paris", Coordinates(2.3522219, 48.856614))
+    val singapore = PointOfInterst("Singapore", Coordinates(1.28967, 103.85007))
+    val data = Seq(paris, singapore)
+    val tempDamysos = Damysos() ++ data
+    assert(tempDamysos.toList == data)
+  }
+
   it should "return the correct size" in {
 
     val damysosFranceSize = PerfUtils.time[Int]("Counting the elements in France dataset") {
