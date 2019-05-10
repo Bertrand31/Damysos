@@ -48,7 +48,7 @@ The `++` method accepting a `TraversableOnce` argument, it means you can feed it
 ```scala
 import damysos.PointOfInterst
 
-val data: Iterator[PointOfInterst] = PointOfInterst.loadFromCSV("cities_world.csv"_
+val data: Iterator[PointOfInterst] = PointOfInterst.loadFromCSV("cities_world.csv")
 damysos ++ data // Lines will be pulled one by one from the CSV file to be added to the Damysos
 ```
 From there, we can start querying our data structure:
@@ -66,6 +66,7 @@ It also supports removing single elements or a TraversableOnce of elements:
 damysos - paris
 damysos -- data
 ```
+
  ## Caveats
 
  (TODO: talk about "breakoff points" and resulting incomplete results)
