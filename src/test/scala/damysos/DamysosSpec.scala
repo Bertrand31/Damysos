@@ -50,4 +50,17 @@ class DamysosSpec extends FlatSpec {
     }
     assert(worldMatches.length == 13)
   }
+
+  it should "return the correct size" in {
+
+    val damysosFranceSize = PerfUtils.time[Int]("Counting the elements in France dataset") {
+      damysosFrance.size
+    }
+    assert(damysosFranceSize == 36318)
+
+    val damysosWorldSize = PerfUtils.time[Int]("Counting the elements in World dataset") {
+      damysosWorld.size
+    }
+    assert(damysosWorldSize == 128769)
+  }
 }

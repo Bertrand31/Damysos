@@ -28,7 +28,7 @@ time. This is because, if we have a GeoTrie 10 levels deeps and we ask for a pre
 we'll descend 5 levels of the trie and then recursively explore all the branches from that point to
 get all the points below it.
 Hence, the lower the precision, the less we descend the trie before we start exploring all of its
-sub-tries, and the more branches we'll have to explore from that point.
+sub-tries, so the more branches we'll have to explore from that point.
 
 ## Usage
 
@@ -57,11 +57,11 @@ damysos contains bayonne
 
 damysos findSurrounding paris
 ```
-Note that findSurrounding also takes a "precision" argument to adjust the "zoom" level:
+Note that `findSurrounding` also takes a `precision` argument to adjust the "zoom" level:
 ```scala
 damysos.findSurrounding(paris, precision=4)
 ```
-It also supports removing single elements or a TraversableOnce of elements:
+It also supports removing single element or a `TraversableOnce` of elements:
 ```scala
 damysos - paris
 damysos -- data

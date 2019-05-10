@@ -17,6 +17,12 @@ final case class Node(children: Map[Char, GeoTrie] = Map()) extends GeoTrie {
       case Leaf(locations) => locations
     })
 
+  def size(): Int =
+    children.values.toList.map({
+      case x: Node         => x.size
+      case Leaf(locations) => locations.size
+    }).sum
+
   @tailrec
   def findLeaf(path: List[Char], trie: Option[GeoTrie] = Some(this)): Option[GeoTrie] =
     path match {

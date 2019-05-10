@@ -37,6 +37,8 @@ case class Damysos(
 
   def toList(): List[PointOfInterst] = latitudeGeoTrie.toList
 
+  def size(): Int = latitudeGeoTrie.size
+
   // We arbitrarily use the latitudeGeoTrie for this operation, but either would be fine
   def contains(point: PointOfInterst): Boolean =
     latitudeGeoTrie.findLeaf(latitudePath(point.coordinates)).collect({
