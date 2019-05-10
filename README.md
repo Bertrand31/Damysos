@@ -32,7 +32,7 @@ sub-tries, and the more branches we'll have to explore from that point.
 
 ## Usage
 
-First, create a Damysos instance. Then, feed it a TraversableOnce of `PointOfInterst`s to add data:
+First, create a Damysos instance. Then, feed it multiple `PointOfInterst` to add data to it:
 ```scala
 import damysos.Damysos
 
@@ -43,7 +43,7 @@ val pointsOfInterest = Seq(paris, toulouse)
 val bayonne = PointOfInterst("Bayonne", Coordinates(43.48333D, -1.48333D))
 damysos ++ pointsOfInterest + bayonne
 ```
-The `++` method accepting a `TraversableOnce` argument, it means you can feed it either a normal
+The `++` method accepts a `TraversableOnce` argument, it means you can feed it either a normal
 `Collection` (like the `Seq` above) or a lazy `Iterator`:
 ```scala
 import damysos.PointOfInterst
