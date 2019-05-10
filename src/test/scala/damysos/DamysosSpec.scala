@@ -39,14 +39,14 @@ class DamysosSpec extends FlatSpec {
   it should "find the neighboring points" in {
 
     val franceMatches = PerfUtils.time[List[PointOfInterst]]("Searching in France dataset") {
-      val paris = Coordinates(2.3522219, 48.856614)
-      damysosFrance.findSurrounding(paris)
+      val parisCoordinates = Coordinates(2.3522219, 48.856614)
+      damysosFrance.findSurrounding(parisCoordinates)
     }
     assert(franceMatches.length == 91)
 
     val worldMatches = PerfUtils.time[List[PointOfInterst]]("Searching in World dataset") {
-      val singapore = Coordinates(1.28967, 103.85007)
-      damysosWorld.findSurrounding(singapore, 5)
+      val singaporeCoordinates = Coordinates(1.28967, 103.85007)
+      damysosWorld.findSurrounding(singaporeCoordinates, 5)
     }
     assert(worldMatches.length == 13)
   }
@@ -62,5 +62,23 @@ class DamysosSpec extends FlatSpec {
       damysosWorld.size
     }
     assert(damysosWorldSize == 128769)
+  }
+
+  it should "remove an element" in {
+    val paris = PointOfInterst("Paris", Coordinates(2.3522219, 48.856614))
+    val tempDamysos = Damysos() + paris
+    assert(tempDamysos.size == 1)
+    val emptyDamysos = tempDamysos - paris
+    assert(emptyDamysos.size == 0)
+  }
+
+  it should "remove multiple elements" in {
+    val paris = PointOfInterst("Paris", Coordinates(2.3522219, 48.856614))
+    val singapore = PointOfInterst("Singapore", Coordinates(1.28967, 103.85007))
+    val data = Seq(paris, singapore)
+    val tempDamysos = Damysos() ++ data
+    assert(tempDamysos.size == 2)
+    val emptyDamysos = tempDamysos -- data
+    assert(emptyDamysos.size == 0)
   }
 }
