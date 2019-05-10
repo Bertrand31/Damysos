@@ -5,7 +5,7 @@ version := "1"
 scalaVersion := "2.12.8"
 
 // SBT scoverage settings
-coverageMinimum := 90
+coverageMinimum := 95
 coverageFailOnMinimum := true
 
 val MonocleVersion = "1.5.0"
