@@ -5,14 +5,20 @@ import damysos.PointOfInterst
 
 class DamysosSpec extends FlatSpec {
 
+  import org.scalatest.Matchers._
+
   // Cities of France Damysos
-  lazy val damysosFrance = PerfUtils.time[Damysos](s"Populating a Damysos with French cities") {
+  val damysosFrance = PerfUtils.time[Damysos](s"Populating a Damysos with French cities") {
     Damysos() ++ PointOfInterst.loadFromCSV("france_cities.csv")
   }
 
   // World cities Damysos
-  lazy val damysosWorld = PerfUtils.time[Damysos](s"Populating a Damysos with world cities") {
+  val damysosWorld = PerfUtils.time[Damysos](s"Populating a Damysos with world cities") {
     Damysos() ++ PointOfInterst.loadFromCSV("world_cities.csv")
+  }
+
+  PerfUtils.time[List[PointOfInterst]]("toList") {
+    damysosWorld.toList
   }
 
   behavior of "The Damysos"
@@ -57,7 +63,7 @@ class DamysosSpec extends FlatSpec {
     val singapore = PointOfInterst("Singapore", Coordinates(1.28967, 103.85007))
     val data = Seq(paris, singapore)
     val tempDamysos = Damysos() ++ data
-    assert(tempDamysos.toList == data)
+    tempDamysos.toList should contain theSameElementsAs data
   }
 
   it should "return the correct size" in {

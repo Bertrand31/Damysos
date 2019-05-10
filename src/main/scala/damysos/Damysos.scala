@@ -35,7 +35,7 @@ case class Damysos(
 
   private val DefaultPrecision = 6
 
-  def toList(): List[PointOfInterst] = latitudeGeoTrie.toList
+  def toList: List[PointOfInterst] = latitudeGeoTrie.toList
 
   def size(): Int = latitudeGeoTrie.size
 
