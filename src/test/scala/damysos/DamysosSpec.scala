@@ -1,24 +1,18 @@
 import org.scalatest.FlatSpec
-import scala.io.Source
 import utils.PerfUtils
 import damysos.{Coordinates, PointOfInterst, Damysos}
+import damysos.PointOfInterst
 
 class DamysosSpec extends FlatSpec {
 
-  private def loadPIOsFromCSV(filename: String): Iterator[PointOfInterst] =
-    Source.fromFile(s"/home/bertrand/Code/Damysos/src/main/ressources/$filename")
-      .getLines
-      .map(_.split(";"))
-      .map(arr => PointOfInterst(arr(0), Coordinates(arr(1).toDouble, arr(2).toDouble)))
-
-  // Cities of France dataset
-  val damysosFrance = PerfUtils.time[Damysos](s"Populating a Damysos with French cities") {
-    Damysos() ++ loadPIOsFromCSV("france_cities.csv")
+  // Cities of France Damysos
+  lazy val damysosFrance = PerfUtils.time[Damysos](s"Populating a Damysos with French cities") {
+    Damysos() ++ PointOfInterst.loadFromCSV("france_cities.csv")
   }
 
-  // World cities dataset
-  val damysosWorld = PerfUtils.time[Damysos](s"Populating a Damysos with world cities") {
-    Damysos() ++ loadPIOsFromCSV("world_cities.csv")
+  // World cities Damysos
+  lazy val damysosWorld = PerfUtils.time[Damysos](s"Populating a Damysos with world cities") {
+    Damysos() ++ PointOfInterst.loadFromCSV("world_cities.csv")
   }
 
   behavior of "The Damysos"
@@ -30,13 +24,13 @@ class DamysosSpec extends FlatSpec {
       assert(!(damysosFrance contains fake)) // The coordinates exist, but with a different name
       val nonExistant = PointOfInterst("I do not exist", Coordinates(-0.380752, 47.501715))
       assert(!(damysosFrance contains nonExistant)) // All properties of this PIO are inexistant
-      loadPIOsFromCSV("france_cities.csv").foreach(item => {
+      PointOfInterst.loadFromCSV("france_cities.csv").foreach(item => {
         assert(damysosFrance contains item)
       })
     }
 
     PerfUtils.time[Unit]("Checking World Damysos integirty") {
-      loadPIOsFromCSV("world_cities.csv").foreach(item => {
+      PointOfInterst.loadFromCSV("world_cities.csv").foreach(item => {
         assert(damysosWorld contains item)
       })
     }

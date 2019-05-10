@@ -11,7 +11,8 @@ case class Damysos(
   private val TreeBreadth = 4
   private val GPSDecimals = 6
   // 360 is the maximum value a GPS coordinate can take. So it is the trie depth we need.
-  private val TreeDepth = MathUtils.toBase(TreeBreadth, 360L * Math.pow(10, GPSDecimals).toLong).length
+  private val TreeDepth =
+    MathUtils.toBase(TreeBreadth, 360L * Math.pow(10, GPSDecimals).toLong).length
 
   // Returns an `TreeDepth`-characters-long base-`TreeBreadth` number as a String
   private def toPaddedBase(base: Int, number: Double): String =
@@ -27,14 +28,14 @@ case class Damysos(
     toPaddedBase(TreeBreadth, coordinate - minValue).toCharArray.toList
 
   private def latitudePath(coordinates: Coordinates): List[Char] =
-    makePath(-90, coordinates.latitude)
+    makePath(-90, coordinates.latitude) // Latitude spans from -90 (90N) to 90 (90S)
 
   private def longitudePath(coordinates: Coordinates): List[Char] =
-    makePath(-180, coordinates.longitude)
+    makePath(-180, coordinates.longitude) // Longitude spans from -180 (180W) to 180 (180E)
 
   private val DefaultPrecision = 6
 
-  def toList(): List[PointOfInterst] = this.latitudeGeoTrie.toList
+  def toList(): List[PointOfInterst] = latitudeGeoTrie.toList
 
   // We arbitrarily use the latitudeGeoTrie for this operation, but either would be fine
   def contains(point: PointOfInterst): Boolean =
@@ -53,13 +54,21 @@ case class Damysos(
     latitudeMatches intersect longitudeMatches
   }
 
-  def :+(item: PointOfInterst): Damysos =
+  def +(item: PointOfInterst): Damysos =
     this.copy(
-      latitudeGeoTrie = (latitudeGeoTrie.insertAtPath(item, latitudePath(item.coordinates))),
-      longitudeGeoTrie = (longitudeGeoTrie.insertAtPath(item, longitudePath(item.coordinates)))
+      latitudeGeoTrie=latitudeGeoTrie.insertAtPath(item, latitudePath(item.coordinates)),
+      longitudeGeoTrie=longitudeGeoTrie.insertAtPath(item, longitudePath(item.coordinates))
     )
 
-  // TraversableOnce encompasses both normal collections and Iterator. So this one method can be
-  // used either with a normal collection or a lazy one, like reading from a file line by line.
-  def ++(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ :+ _)
+  // TraversableOnce encompasses both normal collections and Iterator. So this method can be used
+  // either with a normal collection or a lazy one, like reading from a file line by line.
+  def ++(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ + _)
+
+  def -(item: PointOfInterst): Damysos =
+    this.copy(
+      latitudeGeoTrie=latitudeGeoTrie.removeAtPath(item, latitudePath(item.coordinates)),
+      longitudeGeoTrie=longitudeGeoTrie.removeAtPath(item, longitudePath(item.coordinates))
+    )
+
+  def --(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ - _)
 }
