@@ -12,12 +12,18 @@ case class PointOfInterst(
 
 object PointOfInterst {
 
-  private def arrayToPIO(arr: List[String]): PointOfInterst =
-    PointOfInterst(arr(0), Coordinates(arr(1).toDouble, arr(2).toDouble))
+  private def arrayToPIO(arr: Array[String]): PointOfInterst =
+    PointOfInterst(
+      name=arr(0),
+      coordinates=Coordinates(
+        latitude=arr(1).toDouble,
+        longitude=arr(2).toDouble
+      )
+    )
 
   def loadFromCSV(filename: String): Iterator[PointOfInterst] =
     scala.io.Source.fromResource(filename)
       .getLines
-      .map(_.split(";").toList)
+      .map(_.split(";"))
       .map(arrayToPIO)
 }

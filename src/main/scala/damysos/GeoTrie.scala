@@ -13,13 +13,13 @@ final case class Node(children: Map[Char, GeoTrie] = Map()) extends GeoTrie {
 
   def toList(): List[PointOfInterst] =
     children.values.toList.flatMap({
-      case x: Node         => x.toList
+      case node: Node      => node.toList
       case Leaf(locations) => locations
     })
 
   def size(): Int =
     children.values.toList.map({
-      case x: Node         => x.size
+      case node: Node      => node.size
       case Leaf(locations) => locations.size
     }).sum
 
