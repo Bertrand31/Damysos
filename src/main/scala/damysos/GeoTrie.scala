@@ -11,17 +11,19 @@ final case class Node(children: Map[Char, GeoTrie] = Map()) extends GeoTrie {
   private val childrenL: Lens[Node, Map[Char, GeoTrie]] = GenLens[Node](_.children)
   private val locationsL: Lens[Leaf, Set[PointOfInterst]] = GenLens[Leaf](_.locations)
 
-  def toList(): List[PointOfInterst] =
+  def toList: List[PointOfInterst] =
     children.values.toList.flatMap({
       case node: Node      => node.toList
       case Leaf(locations) => locations
     })
 
-  def size(): Int =
-    children.values.toList.map({
-      case node: Node      => node.size
-      case Leaf(locations) => locations.size
-    }).sum
+  def size: Int =
+    children.foldLeft(0)((acc, t) =>
+      t._2 match {
+        case node: Node => acc + node.size
+        case Leaf(location) => acc + location.size
+      }
+    )
 
   @tailrec
   def findLeaf(path: List[Char], trie: Option[GeoTrie] = Some(this)): Option[GeoTrie] =

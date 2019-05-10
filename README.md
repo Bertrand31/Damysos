@@ -66,7 +66,14 @@ It also supports removing single element or a `TraversableOnce` of elements:
 damysos - paris
 damysos -- data
 ```
+It also supports returning all of its contents as a `List` and lastly, counting the number of
+elements it contains:
+```scala
+damysos.toList
+damysos.size
+```
 
  ## Caveats
 
+Because of the way tries work and of the encoding of coordinates,
  (TODO: talk about "breakoff points" and resulting incomplete results)
