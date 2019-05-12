@@ -24,7 +24,7 @@ finds all the neighboring points of a given GPS coordinate in under 400μs.
 
 The speed of that search, however, depends on the level of precision (or "zoom") you want to
 achieve.  Although it may appear counter intuitive, a lower precision actually means a longer query
-time. This is because, if we have a GeoTrie 10 levels deeps and we ask for a precision of 5, then
+time. This is because, if we are using tries 10 levels deeps and we ask for a precision of 5, then
 we'll descend 5 levels of the trie and then recursively explore all the branches from that point to
 get all the points below it.
 Hence, the lower the precision, the less we descend the trie before we start exploring all of its
@@ -75,5 +75,20 @@ damysos.size
 
  ## Caveats
 
-Because of the way tries work and of the encoding of coordinates,
+Because of the way tries work and of the encoding of coordinates, then we're nearing a "breakoff
+point" of the base we have chosen, the trie won't "see" anything that is geographically close, but
+which key is right after this breakoff point.
+
+For example, the keys "333" and "400" have nothing in common as far as a Trie is concerned, and yet
+they are numerically very close so the points the represent are also very close.
+
+For this reason, this early version of Damysos will sometimes give incomplete result, and will be
+"blind" to everything that is after of before the aforementionned "breakup points".
+Because of this, it can only be used to return "some close points" as quickly as possible and
+cannot be expected to return exhaustive results.
+
+A second version is forthcoming, that will address that issue. But because it will incurr a
+performance tradeoff, both approaches will coexist, because the first (current) use-case can be
+valid in certain stuations swhere we do not neeed the results to be comprehensive, we just want
+some points, as quickly as possible.
  (TODO: talk about "breakoff points" and resulting incomplete results)
