@@ -11,7 +11,7 @@ final case class Node(children: Map[Char, GeoTrie] = Map()) extends GeoTrie {
   private val childrenL: Lens[Node, Map[Char, GeoTrie]] = GenLens[Node](_.children)
   private val locationsL: Lens[Leaf, Set[PointOfInterst]] = GenLens[Leaf](_.locations)
 
-  def toList: List[PointOfInterst] =
+  lazy val toList: List[PointOfInterst] =
     children.foldLeft(List[PointOfInterst]())((acc, kv) =>
       kv._2 match {
         case node: Node      => node.toList ++ acc
