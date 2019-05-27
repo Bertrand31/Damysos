@@ -13,6 +13,7 @@ val MonocleVersion = "1.5.0"
 libraryDependencies ++= Seq(
   "com.github.julien-truffaut" %%  "monocle-core"  % MonocleVersion,
   "com.github.julien-truffaut" %%  "monocle-macro" % MonocleVersion,
+  "org.typelevel" %% "cats-core" % "2.0.0-M1",
   "org.scalatest" %% "scalatest" % "3.0.5"
 )
 

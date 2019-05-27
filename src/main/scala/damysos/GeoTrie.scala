@@ -11,19 +11,23 @@ final case class Node(children: Map[Char, GeoTrie] = Map()) extends GeoTrie {
   private val childrenL: Lens[Node, Map[Char, GeoTrie]] = GenLens[Node](_.children)
   private val locationsL: Lens[Leaf, Set[PointOfInterst]] = GenLens[Leaf](_.locations)
 
-  lazy val toList: List[PointOfInterst] =
-    children.foldLeft(List[PointOfInterst]())((acc, kv) =>
-      kv._2 match {
-        case node: Node      => node.toList ++ acc
-        case Leaf(locations) => locations.toList ++ acc
+  def toSet: Set[PointOfInterst] =
+    children.foldLeft(Set[PointOfInterst]())((acc, kv) =>
+      acc ++ {
+        kv._2 match {
+          case node: Node      => node.toSet
+          case Leaf(locations) => locations
+        }
       }
     )
 
-  def size: Int =
+  lazy val size: Int =
     children.foldLeft(0)((acc, kv) =>
-      kv._2 match {
-        case node: Node => acc + node.size
-        case Leaf(location) => acc + location.size
+      acc + {
+          kv._2 match {
+          case node: Node => node.size
+          case Leaf(location) => location.size
+        }
       }
     )
 

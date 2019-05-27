@@ -12,8 +12,6 @@ object PerfUtils {
   }
 
   def profile(id: String)(block: => Any): Long = {
-    println("============================")
-    println(s"Profiling $id:")
     def print_result(s: String, ns: Long) = {
       val format = java.text.NumberFormat.getIntegerInstance.format(_: Long)
       println(s.padTo(16, " ").mkString + format(ns) + " ns")
@@ -22,6 +20,9 @@ object PerfUtils {
     var t0 = System.nanoTime()
     var result = block
     var t1 = System.nanoTime()
+
+    println("============================")
+    println(s"Profiling $id:")
 
     print_result("Cold run", (t1 - t0))
 

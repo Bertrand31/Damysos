@@ -1,6 +1,7 @@
 package damysos
 
 import utils.MathUtils
+import utils.PerfUtils
 
 case class Damysos(
   private val latitudeGeoTrie: Node = Node(),
@@ -35,9 +36,9 @@ case class Damysos(
 
   private val DefaultPrecision = 6
 
-  def toList: List[PointOfInterst] = latitudeGeoTrie.toList
+  def toSet: Set[PointOfInterst] = latitudeGeoTrie.toSet
 
-  def size: Int = latitudeGeoTrie.size
+  lazy val size: Int = latitudeGeoTrie.size
 
   // We arbitrarily use the latitudeGeoTrie for this operation, but either would be fine
   def contains(point: PointOfInterst): Boolean =
@@ -48,11 +49,20 @@ case class Damysos(
   def findSurrounding(
     coordinates: Coordinates,
     precision: Int = DefaultPrecision
-  ): List[PointOfInterst] = {
+  ): Set[PointOfInterst] = {
     def getMatches(path: List[Char], trie: Node) = trie.findLeaf(path.take(precision))
-      .collect({ case node: Node => node.toList }).getOrElse(List())
+      .collect({ case node: Node => node.toSet }).getOrElse(Set())
+    PerfUtils.profile("getting latitude matches") {
+      getMatches(latitudePath(coordinates), latitudeGeoTrie)
+    }
     val latitudeMatches = getMatches(latitudePath(coordinates), latitudeGeoTrie)
+    PerfUtils.profile("getting longitude matches") {
+      getMatches(longitudePath(coordinates), longitudeGeoTrie)
+    }
     val longitudeMatches = getMatches(longitudePath(coordinates), longitudeGeoTrie)
+    PerfUtils.profile("getting intersection") {
+      latitudeMatches intersect longitudeMatches
+    }
     latitudeMatches intersect longitudeMatches
   }
 
