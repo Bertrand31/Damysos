@@ -17,26 +17,22 @@ object PerfUtils {
       println(s.padTo(16, " ").mkString + format(ns) + " ns")
     }
 
-    var t0 = System.nanoTime()
-    var result = block
-    var t1 = System.nanoTime()
+    var tmpTime = 0L
+    val runtimes = (0 to 10).map(i => {
+      tmpTime = System.nanoTime
+      block
+      System.nanoTime - tmpTime
+    })
 
     println("============================")
     println(s"Profiling $id:")
 
-    print_result("Cold run", (t1 - t0))
-
-    val runtimes = (1 to 10).map(i => {
-      t0 = System.nanoTime()
-      result = block
-      t1 = System.nanoTime()
-      (t1 - t0).toLong
-    })
-
-    print_result("Max", runtimes.max)
-    print_result("Min", runtimes.min)
-    val avg = runtimes.sum / runtimes.length
-    print_result("Avg", avg)
+    print_result("Cold run", runtimes.head)
+    val hotRuns = runtimes.tail
+    print_result("Max", hotRuns.max)
+    print_result("Min", hotRuns.min)
+    val avg = hotRuns.sum / hotRuns.length
+    print_result("Avg hot", avg)
     avg
   }
 }
