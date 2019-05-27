@@ -1,5 +1,8 @@
 # Damysos
 
+[![codecov](https://codecov.io/gh/Bertrand31/Damysos/branch/master/graph/badge.svg)](https://codecov.io/gh/Bertrand31/Damysos)
+
+
 Damysos is an experiment stemming from the idea that tries could be used to store points in a
 n-dimensional space in a way that would allow for fast querying of "neighboring" points.
 
