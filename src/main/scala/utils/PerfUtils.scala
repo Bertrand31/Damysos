@@ -29,8 +29,8 @@ object PerfUtils {
 
     print_result("Cold run", runtimes.head)
     val hotRuns = runtimes.tail
-    print_result("Max", hotRuns.max)
-    print_result("Min", hotRuns.min)
+    print_result("Max hot", hotRuns.max)
+    print_result("Min hot", hotRuns.min)
     val avg = hotRuns.sum / hotRuns.length
     print_result("Avg hot", avg)
     avg
