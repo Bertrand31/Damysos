@@ -3,10 +3,7 @@ package damysos
 import utils.MathUtils
 import utils.PerfUtils
 
-case class Damysos(
-  private val latitudeGeoTrie: Node = Node(),
-  private val longitudeGeoTrie: Node = Node()
-) {
+case class Damysos(private val geoTrie: Node = Node()) {
 
   // The lower the breadth, the deeper the tree and thus, the more precision levels available.
   private val TreeBreadth = 4
@@ -28,59 +25,40 @@ case class Damysos(
   private def makePath(minValue: Int, coordinate: Double): List[Char] =
     toPaddedBase(TreeBreadth, coordinate - minValue).toCharArray.toList
 
-  private def latitudePath(coordinates: Coordinates): List[Char] =
+  private def latLongPath(coordinates: Coordinates): List[(Char, Char)] =
     makePath(-90, coordinates.latitude) // Latitude spans from -90 (90N) to 90 (90S)
-
-  private def longitudePath(coordinates: Coordinates): List[Char] =
-    makePath(-180, coordinates.longitude) // Longitude spans from -180 (180W) to 180 (180E)
+      .zip(makePath(-180, coordinates.longitude)) // Longitude spans from -180 (180W) to 180 (180E)
 
   private val DefaultPrecision = 6
 
-  def toSet: Set[PointOfInterst] = latitudeGeoTrie.toSet
+  def toSet: Set[PointOfInterst] = geoTrie.toSet
 
-  lazy val size: Int = latitudeGeoTrie.size
+  lazy val size: Int = geoTrie.size
 
   // We arbitrarily use the latitudeGeoTrie for this operation, but either would be fine
   def contains(point: PointOfInterst): Boolean =
-    latitudeGeoTrie.findLeaf(latitudePath(point.coordinates)).collect({
-      case leaf: Leaf => leaf.locations.contains(point)
-    }).getOrElse(false)
+    geoTrie.findLeaf(latLongPath(point.coordinates)) match {
+      case Some(leaf: Leaf) => leaf.locations.contains(point)
+      case _ => false
+    }
 
   def findSurrounding(
     coordinates: Coordinates,
     precision: Int = DefaultPrecision
-  ): Set[PointOfInterst] = {
-    def getMatches(path: List[Char], trie: Node) = trie.findLeaf(path.take(precision))
+  ): Set[PointOfInterst] =
+    this.geoTrie
+      .findLeaf(latLongPath(coordinates).take(precision))
       .collect({ case node: Node => node.toSet }).getOrElse(Set())
-    // PerfUtils.profile("getting latitude matches") {
-      // getMatches(latitudePath(coordinates), latitudeGeoTrie)
-    // }
-    val latitudeMatches = getMatches(latitudePath(coordinates), latitudeGeoTrie)
-    // PerfUtils.profile("getting longitude matches") {
-      // getMatches(longitudePath(coordinates), longitudeGeoTrie)
-    // }
-    val longitudeMatches = getMatches(longitudePath(coordinates), longitudeGeoTrie)
-    // PerfUtils.profile("getting intersection") {
-      // latitudeMatches intersect longitudeMatches
-    // }
-    latitudeMatches intersect longitudeMatches
-  }
 
   def +(item: PointOfInterst): Damysos =
-    this.copy(
-      latitudeGeoTrie=latitudeGeoTrie.insertAtPath(item, latitudePath(item.coordinates)),
-      longitudeGeoTrie=longitudeGeoTrie.insertAtPath(item, longitudePath(item.coordinates))
-    )
+    this.copy(geoTrie=geoTrie.insertAtPath(item, latLongPath(item.coordinates)))
 
   // TraversableOnce encompasses both normal collections and Iterator. So this method can be used
   // either with a normal collection or a lazy one, like reading from a file line by line.
   def ++(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ + _)
 
   def -(item: PointOfInterst): Damysos =
-    this.copy(
-      latitudeGeoTrie=latitudeGeoTrie.removeAtPath(item, latitudePath(item.coordinates)),
-      longitudeGeoTrie=longitudeGeoTrie.removeAtPath(item, longitudePath(item.coordinates))
-    )
+    this.copy(geoTrie=geoTrie.removeAtPath(item, latLongPath(item.coordinates)))
 
   def --(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ - _)
 }

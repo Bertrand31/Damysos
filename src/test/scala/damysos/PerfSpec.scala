@@ -15,7 +15,7 @@ class PerfSpec extends FlatSpec {
 
   "Damysos serch" should "be orders or magnitude faster then a naive linear search" in {
     val cities = PointOfInterst.loadFromCSV("world_cities.csv").toList
-    val augmentedData = (0 to 5).toList.flatMap(i =>
+    val augmentedData = (0 to 20).toList.flatMap(i =>
       cities.map(poi =>
         poi.copy(
           name = poi.name + i,
