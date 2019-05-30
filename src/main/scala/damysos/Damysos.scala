@@ -52,17 +52,17 @@ case class Damysos(
   ): Set[PointOfInterst] = {
     def getMatches(path: List[Char], trie: Node) = trie.findLeaf(path.take(precision))
       .collect({ case node: Node => node.toSet }).getOrElse(Set())
-    PerfUtils.profile("getting latitude matches") {
-      getMatches(latitudePath(coordinates), latitudeGeoTrie)
-    }
+    // PerfUtils.profile("getting latitude matches") {
+      // getMatches(latitudePath(coordinates), latitudeGeoTrie)
+    // }
     val latitudeMatches = getMatches(latitudePath(coordinates), latitudeGeoTrie)
-    PerfUtils.profile("getting longitude matches") {
-      getMatches(longitudePath(coordinates), longitudeGeoTrie)
-    }
+    // PerfUtils.profile("getting longitude matches") {
+      // getMatches(longitudePath(coordinates), longitudeGeoTrie)
+    // }
     val longitudeMatches = getMatches(longitudePath(coordinates), longitudeGeoTrie)
-    PerfUtils.profile("getting intersection") {
-      latitudeMatches intersect longitudeMatches
-    }
+    // PerfUtils.profile("getting intersection") {
+      // latitudeMatches intersect longitudeMatches
+    // }
     latitudeMatches intersect longitudeMatches
   }
 
