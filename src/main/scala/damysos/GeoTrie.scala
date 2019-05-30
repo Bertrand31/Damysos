@@ -7,7 +7,7 @@ final case class Leaf(locations: Set[PointOfInterst] = Set()) extends GeoTrie
 final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDim(4))) extends GeoTrie {
 
   def toSet: Set[PointOfInterst] =
-    children.foldLeft(Set[PointOfInterst]())((acc, arr) => {
+    children.foldLeft(Set[PointOfInterst]())((acc, arr) =>
       acc ++ {
         arr.foldLeft(Set[PointOfInterst]())((acc2, kv) =>
           kv match {
@@ -17,10 +17,10 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
           }
         )
       }
-    })
+    )
 
   lazy val size: Int =
-    children.foldLeft(0)((acc, arr) => {
+    children.foldLeft(0)((acc, arr) =>
       acc + arr.foldLeft(0)((acc2, kv) => {
         kv match {
           case node: Node => acc2 + node.size
@@ -28,7 +28,7 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
           case _ => acc2
         }
       })
-    })
+    )
 
   @tailrec
   def findLeaf(path: List[(Char, Char)], trie: GeoTrie = this): Option[GeoTrie] =
@@ -38,9 +38,8 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
         val longIndex = head._2.toString.toInt
         trie match {
           case Node(children) => {
-            if (children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex)) {
+            if (children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex))
               Some(children(latIndex)(longIndex))
-            }
             else None
           }
           case _ => None
@@ -51,9 +50,8 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
         val longIndex = head._2.toString.toInt
         trie match {
           case Node(children) => {
-            if (children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex)) {
+            if (children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex))
               findLeaf(tail, children(latIndex)(longIndex))
-            }
             else None
           }
           case _ => None
@@ -68,12 +66,11 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
         val latIndex = head._1.toString.toInt
         val longIndex = head._2.toString.toInt
         val leaf = {
-          if (node.children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex)) {
+          if (node.children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex))
             node.children(latIndex)(longIndex) match {
               case leaf: Leaf => leaf
               case _ => Leaf()
             }
-          }
           else Leaf()
         }
         node.copy(
