@@ -9,8 +9,8 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
   def toSet: Set[PointOfInterst] =
     children.foldLeft(Set[PointOfInterst]())((acc, arr) =>
       acc ++ {
-        arr.foldLeft(Set[PointOfInterst]())((acc2, kv) =>
-          kv match {
+        arr.foldLeft(Set[PointOfInterst]())((acc2, geoTrie) =>
+          geoTrie match {
             case node: Node      => acc2 ++ node.toSet
             case Leaf(locations) => acc2 ++ locations
             case _ => acc2
@@ -21,13 +21,13 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
 
   lazy val size: Int =
     children.foldLeft(0)((acc, arr) =>
-      acc + arr.foldLeft(0)((acc2, kv) => {
-        kv match {
+      acc + arr.foldLeft(0)((acc2, geoTrie) =>
+        geoTrie match {
           case node: Node => acc2 + node.size
           case Leaf(location) => acc2 + location.size
           case _ => acc2
         }
-      })
+      )
     )
 
   @tailrec
