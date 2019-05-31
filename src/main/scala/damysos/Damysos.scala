@@ -22,16 +22,16 @@ case class Damysos(private val geoTrie: Node = Node()) {
       .reverse
       .mkString
 
-  private def makePath(minValue: Int, coordinate: Double): List[Char] =
-    toPaddedBase(TreeBreadth, coordinate - minValue).toCharArray.toList
+  private def makePath(minValue: Int, coordinate: Double): List[Int] =
+    toPaddedBase(TreeBreadth, coordinate - minValue).toCharArray.map(_.toString.toInt).toList
 
-  private def latLongPath(coordinates: Coordinates): List[(Char, Char)] =
+  private def latLongPath(coordinates: Coordinates): List[(Int, Int)] =
     makePath(-90, coordinates.latitude) // Latitude spans from -90 (90N) to 90 (90S)
       .zip(makePath(-180, coordinates.longitude)) // Longitude spans from -180 (180W) to 180 (180E)
 
   private val DefaultPrecision = 6
 
-  def toSet: Set[PointOfInterst] = geoTrie.toSet
+  def toArray: Array[PointOfInterst] = geoTrie.toArray
 
   lazy val size: Int = geoTrie.size
 
@@ -45,10 +45,10 @@ case class Damysos(private val geoTrie: Node = Node()) {
   def findSurrounding(
     coordinates: Coordinates,
     precision: Int = DefaultPrecision
-  ): Set[PointOfInterst] =
+  ): Array[PointOfInterst] =
     this.geoTrie
       .findLeaf(latLongPath(coordinates).take(precision))
-      .collect({ case node: Node => node.toSet }).getOrElse(Set())
+      .collect({ case node: Node => node.toArray }).getOrElse(Array())
 
   def +(item: PointOfInterst): Damysos =
     this.copy(geoTrie=geoTrie.insertAtPath(item, latLongPath(item.coordinates)))

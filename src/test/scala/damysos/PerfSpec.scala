@@ -27,17 +27,17 @@ class PerfSpec extends FlatSpec {
     val damysos = Damysos() ++ augmentedData
     val singapore = Coordinates(1.28967, 103.85007)
 
-    var res2: Set[PointOfInterst] = Set()
+    var res2 = Array[PointOfInterst]()
     val damysosTime = PerfUtils.profile("Damysos search") {
       res2 = damysos.findSurrounding(singapore)
     }
-    println(res2.map(_.name))
+    println(res2.map(_.name).mkString(", "))
 
-    var res1: List[PointOfInterst] = List()
+    var res1 = List[PointOfInterst]()
     val linearTime = PerfUtils.profile("Linear search") {
       res1 = linearSearch(augmentedData, singapore)
     }
-    println(res1.map(_.name))
+    println(res1.map(_.name).mkString(", "))
 
     val timesFaster = linearTime / damysosTime
     assert(timesFaster > 300, s"Only ${timesFaster}x faster")

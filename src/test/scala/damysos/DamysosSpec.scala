@@ -17,8 +17,8 @@ class DamysosSpec extends FlatSpec {
     Damysos() ++ PointOfInterst.loadFromCSV("world_cities.csv")
   }
 
-  PerfUtils.time[Set[PointOfInterst]]("toSet") {
-    damysosWorld.toSet
+  PerfUtils.time[Array[PointOfInterst]]("toArray") {
+    damysosWorld.toArray
   }
 
   behavior of "The Damysos"
@@ -44,13 +44,13 @@ class DamysosSpec extends FlatSpec {
 
   it should "find the neighboring points" in {
 
-    val franceMatches = PerfUtils.time[Set[PointOfInterst]]("Searching in France dataset") {
+    val franceMatches = PerfUtils.time[Array[PointOfInterst]]("Searching in France dataset") {
       val parisCoordinates = Coordinates(2.3522219, 48.856614)
       damysosFrance.findSurrounding(parisCoordinates)
     }
     assert(franceMatches.size == 91)
 
-    val worldMatches = PerfUtils.time[Set[PointOfInterst]]("Searching in World dataset") {
+    val worldMatches = PerfUtils.time[Array[PointOfInterst]]("Searching in World dataset") {
       val singaporeCoordinates = Coordinates(1.28967, 103.85007)
       damysosWorld.findSurrounding(singaporeCoordinates, 5)
     }
@@ -63,7 +63,7 @@ class DamysosSpec extends FlatSpec {
     val singapore = PointOfInterst("Singapore", Coordinates(1.28967, 103.85007))
     val data = Seq(paris, singapore)
     val tempDamysos = Damysos() ++ data
-    tempDamysos.toSet.toList should contain theSameElementsAs data
+    tempDamysos.toArray should contain theSameElementsAs data
   }
 
   it should "return the correct size" in {

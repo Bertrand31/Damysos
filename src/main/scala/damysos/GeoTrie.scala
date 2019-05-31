@@ -3,25 +3,23 @@ package damysos
 import scala.annotation.tailrec
 
 sealed trait GeoTrie
-final case class Leaf(locations: Set[PointOfInterst] = Set()) extends GeoTrie
+final case class Leaf(locations: Array[PointOfInterst] = Array()) extends GeoTrie
 final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDim(4))) extends GeoTrie {
 
-  def toSet: Set[PointOfInterst] =
-    children.foldLeft(Set[PointOfInterst]())((acc, arr) =>
-      acc ++ {
-        arr.foldLeft(Set[PointOfInterst]())((acc2, geoTrie) =>
-          geoTrie match {
-            case node: Node      => acc2 ++ node.toSet
-            case Leaf(locations) => acc2 ++ locations
-            case _ => acc2
-          }
-        )
-      }
+  def toArray: Array[PointOfInterst] =
+    children.foldLeft(Array[PointOfInterst]())((acc, arr) =>
+      arr.foldLeft(acc)((acc2, geoTrie) =>
+        geoTrie match {
+          case node: Node      => acc2 ++ node.toArray
+          case Leaf(locations) => acc2 ++ locations
+          case _ => acc2
+        }
+      )
     )
 
   lazy val size: Int =
     children.foldLeft(0)((acc, arr) =>
-      acc + arr.foldLeft(0)((acc2, geoTrie) =>
+      arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
           case node: Node => acc2 + node.size
           case Leaf(location) => acc2 + location.size
@@ -31,40 +29,35 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
     )
 
   @tailrec
-  def findLeaf(path: List[(Char, Char)], trie: GeoTrie = this): Option[GeoTrie] =
+  def findLeaf(path: List[(Int, Int)], trie: GeoTrie = this): Option[GeoTrie] =
     path match {
-      case head +: Nil => {
-        val latIndex = head._1.toString.toInt
-        val longIndex = head._2.toString.toInt
+      case head +: Nil =>
         trie match {
           case Node(children) => {
+            val (latIndex, longIndex) = head
             if (children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex))
               Some(children(latIndex)(longIndex))
             else None
           }
           case _ => None
         }
-      }
-      case head +: tail => {
-        val latIndex = head._1.toString.toInt
-        val longIndex = head._2.toString.toInt
+      case head +: tail =>
         trie match {
           case Node(children) => {
+            val (latIndex, longIndex) = head
             if (children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex))
               findLeaf(tail, children(latIndex)(longIndex))
             else None
           }
           case _ => None
         }
-      }
     }
 
-  private def pathLocationsL(update: Set[PointOfInterst] => Set[PointOfInterst])
-                            (path: List[(Char, Char)], node: Node): Node =
+  private def pathLocationsL(update: Array[PointOfInterst] => Array[PointOfInterst])
+                            (path: List[(Int, Int)], node: Node): Node =
     path match {
       case head +: Nil => {
-        val latIndex = head._1.toString.toInt
-        val longIndex = head._2.toString.toInt
+        val (latIndex, longIndex) = head
         val leaf = {
           if (node.children.isDefinedAt(latIndex) && children(latIndex).isDefinedAt(longIndex))
             node.children(latIndex)(longIndex) match {
@@ -78,8 +71,7 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
         )
       }
       case head +: tail => {
-        val latIndex = head._1.toString.toInt
-        val longIndex = head._2.toString.toInt
+        val (latIndex, longIndex) = head
         val subNode = {
           if (node.children.isDefinedAt(latIndex) && node.children(latIndex).isDefinedAt(longIndex))
             node.children(latIndex)(longIndex) match {
@@ -94,9 +86,9 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
       }
     }
 
-  def insertAtPath(item: PointOfInterst, path: List[(Char, Char)], node: Node = this): Node =
-    pathLocationsL(_ + item)(path, node)
+  def insertAtPath(item: PointOfInterst, path: List[(Int, Int)], node: Node = this): Node =
+    pathLocationsL(_ :+ item)(path, node)
 
-  def removeAtPath(item: PointOfInterst, path: List[(Char, Char)], node: Node = this): Node =
-    pathLocationsL(_ - item)(path, node)
+  def removeAtPath(item: PointOfInterst, path: List[(Int, Int)], node: Node = this): Node =
+    pathLocationsL(_.filter(_ != item))(path, node)
 }
