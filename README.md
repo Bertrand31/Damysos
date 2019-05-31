@@ -56,15 +56,15 @@ _Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **1 673 997** points:
 ============================
 Profiling Damysos search:
 Cold run        42 834 ns
-Max hot         31 382 ns
-Min hot         15 642 ns
-Avg hot         17 693 ns
+Max hot         23 822 ns
+Min hot         15 744 ns
+Avg hot         16 832 ns
 ============================
 Profiling Linear search:
-Cold run        25 536 491 ns
-Max hot         20 351 186 ns
-Min hot         18 846 736 ns
-Avg hot         19 526 954 ns
+Cold run        30 376 249 ns
+Max hot         19 717 296 ns
+Min hot         18 737 341 ns
+Avg hot         19 198 485 ns
 ```
 As you can see, it is more than 1000 times faster than a linear search. And the bigger the dataset,
 the bigger the performance gap.
