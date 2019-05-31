@@ -2,9 +2,11 @@ package damysos
 
 import scala.annotation.tailrec
 
-sealed trait GeoTrie
-final case class Leaf(locations: Array[PointOfInterst] = Array()) extends GeoTrie
-final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDim(4))) extends GeoTrie {
+protected sealed trait GeoTrie
+protected final case class Leaf(locations: Array[PointOfInterst] = Array()) extends GeoTrie
+protected final case class Node(
+  private val children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDim(4))
+) extends GeoTrie {
 
   def toArray: Array[PointOfInterst] =
     children.foldLeft(Array[PointOfInterst]())((acc, arr) =>
@@ -12,7 +14,7 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
         geoTrie match {
           case node: Node      => acc2 ++ node.toArray
           case Leaf(locations) => acc2 ++ locations
-          case _ => acc2
+          case _               => acc2
         }
       )
     )
@@ -21,9 +23,9 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
     children.foldLeft(0)((acc, arr) =>
       arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
-          case node: Node => acc2 + node.size
+          case node: Node     => acc2 + node.size
           case Leaf(location) => acc2 + location.size
-          case _ => acc2
+          case _              => acc2
         }
       )
     )
@@ -53,8 +55,8 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
         }
     }
 
-  private def pathLocationsL(update: Array[PointOfInterst] => Array[PointOfInterst])
-                            (path: List[(Int, Int)], node: Node): Node =
+  private def updateAtPath(fn: Array[PointOfInterst] => Array[PointOfInterst])
+                          (path: List[(Int, Int)], node: Node): Node =
     path match {
       case head +: Nil => {
         val (latIndex, longIndex) = head
@@ -67,7 +69,10 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
           else Leaf()
         }
         node.copy(
-          children=node.children.updated(latIndex, node.children(latIndex).updated(longIndex, Leaf(update(leaf.locations))))
+          children=node.children.updated(
+            latIndex,
+            node.children(latIndex).updated(longIndex, leaf.copy(fn(leaf.locations)))
+          )
         )
       }
       case head +: tail => {
@@ -81,14 +86,17 @@ final case class Node(children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDi
           else Node()
         }
         node.copy(
-          children=node.children.updated(latIndex, node.children(latIndex).updated(longIndex, pathLocationsL(update)(tail, subNode)))
+          children=node.children.updated(
+            latIndex,
+            node.children(latIndex).updated(longIndex, updateAtPath(fn)(tail, subNode))
+          )
         )
       }
     }
 
   def insertAtPath(item: PointOfInterst, path: List[(Int, Int)], node: Node = this): Node =
-    pathLocationsL(_ :+ item)(path, node)
+    updateAtPath(_ :+ item)(path, node)
 
   def removeAtPath(item: PointOfInterst, path: List[(Int, Int)], node: Node = this): Node =
-    pathLocationsL(_.filter(_ != item))(path, node)
+    updateAtPath(_.filter(_ != item))(path, node)
 }

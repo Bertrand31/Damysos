@@ -13,9 +13,9 @@ class PerfSpec extends FlatSpec {
         (Math.abs(poi.coordinates.latitude - coordinates.latitude) < 0.25)
     )
 
-  "Damysos serch" should "be orders or magnitude faster then a naive linear search" in {
+  "Damysos search" should "be orders or magnitude faster then a naive linear search" in {
     val cities = PointOfInterst.loadFromCSV("world_cities.csv").toList
-    val augmentedData = (0 to 12).toList.flatMap(i =>
+    val augmentedData = (0 to 12).flatMap(i =>
       cities.map(poi =>
         poi.copy(
           name = poi.name + i,
@@ -34,12 +34,14 @@ class PerfSpec extends FlatSpec {
     println(res2.map(_.name).mkString(", "))
 
     var res1 = List[PointOfInterst]()
+    val augmentedDataList = augmentedData.toList
     val linearTime = PerfUtils.profile("Linear search") {
-      res1 = linearSearch(augmentedData, singapore)
+      res1 = linearSearch(augmentedDataList, singapore)
     }
     println(res1.map(_.name).mkString(", "))
 
     val timesFaster = linearTime / damysosTime
-    assert(timesFaster > 300, s"Only ${timesFaster}x faster")
+    println(timesFaster)
+    assert(timesFaster > 600)
   }
 }
