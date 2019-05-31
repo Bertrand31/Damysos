@@ -22,14 +22,30 @@ What's interesting in this approach, in my opinion, resides in the fact that now
 are actually commparing GPS coordinates, calculating distances etc. The data structure itself, in
 this case a Trie, _is_ the logic.
 
-From early testing, on a _Intel Core i7-7700HQ @ 2.80GHz_ CPU and on a dataset of 128769 points, it
-finds all the neighboring points of a given GPS coordinate in under 400μs.
+Here are the results of running the PerfSpec class on a laptop with an
+_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **1 673 997** points:
+```
+============================
+Profiling Damysos search:
+Cold run        71 704 ns
+Max hot         49 756 ns
+Min hot         18 328 ns
+Avg hot         24 752 ns
+============================
+Profiling Linear search:
+Cold run        22 023 930 ns
+Max hot         18 443 829 ns
+Min hot         17 970 324 ns
+Avg hot         18 248 915 ns
+```
+As you can see, it is more than 700 times faster than a linear search. And the bigger the dataset,
+the bigger the performance gap.
 
 The speed of that search, however, depends on the level of precision (or "zoom") you want to
 achieve.  Although it may appear counter intuitive, a lower precision actually means a longer query
 time. This is because, if we are using tries 10 levels deeps and we ask for a precision of 5, then
-we'll descend 5 levels of the trie and then recursively explore all the branches from that point to
-get all the points below it.
+we'll descend 5 levels of the trie (very fast, and tail-recursive) and then explore all the branches
+below that point to get all the points underneath it.
 Hence, the lower the precision, the less we descend the trie before we start exploring all of its
 sub-tries, so the more branches we'll have to explore from that point.
 
@@ -85,12 +101,8 @@ which key is right after this breakoff point.
 For example, the keys "333" and "400" have nothing in common as far as a Trie is concerned, and yet
 they are numerically very close so the points they represent are also very close.
 
-For this reason, this early version of Damysos will sometimes give incomplete results, and will be
-"blind" to everything that is after of before the aforementionned "breakup points".
-Because of this, it can only be used reliably to return "some close points" as quickly as possible
-and cannot be expected to return exhaustive results.
+For this reason, Damysos will sometimes give incomplete results, and will be "blind" to everything
+that is after of before the aforementionned "breakup points".
 
-A second version is forthcoming, that will address this issue. But because it will incurr a
-performance tradeoff, both approaches will coexist, because the first (current) use-case can be
-valid in certain stuations where we do not neeed the results to be comprehensive, we just want
-some points, as quickly as possible.
+**This is why Damysos' goal is not to reliably provide exhaustive results, but rather return _some_
+neighboring points, as quickly as possible.**
