@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/Bertrand31/Damysos/branch/master/graph/badge.svg)](https://codecov.io/gh/Bertrand31/Damysos)
 
-- [Oerview](#overview)
+- [Overview](#overview)
 - [Performance](#performance)
 - [Usage](#usage)
 - [Caveats](#caveats)
@@ -124,8 +124,8 @@ Because of the way tries work and of the encoding of coordinates, when we're nea
 point" of the base we have chosen, the trie won't "see" anything that is geographically close, but
 which key is right after this breakoff point.
 
-For example, the keys "333" and "400" have nothing in common as far as a Trie is concerned, and yet
-they are numerically very close so the points they represent are also very close.
+For example, the paths "333" and "400" have nothing in common as far as a trie is concerned and yet,
+as base-4 numbers, they are numerically very close so the points they represent are also very close.
 
 For this reason, Damysos will sometimes give incomplete results, and will be "blind" to everything
 that is after of before the aforementionned "breakup points".
