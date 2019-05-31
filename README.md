@@ -98,11 +98,11 @@ damysos ++ data // Lines will be pulled one by one from the CSV file to be added
 ```
 From there, we can start querying our data structure:
 ```scala
-damysos contains bayonne
+damysos.contains(bayonne)
 
-damysos findSurrounding paris
+damysos.findSurrounding(paris)
 ```
-Note that `findSurrounding` also takes a `precision` argument to adjust the "zoom" level:
+Note that `findSurrounding` also takes an optional `precision` parameter to adjust the "zoom" level:
 ```scala
 damysos.findSurrounding(paris, precision=4)
 ```
