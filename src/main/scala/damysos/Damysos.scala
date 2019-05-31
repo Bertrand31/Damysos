@@ -1,7 +1,6 @@
 package damysos
 
 import utils.MathUtils
-import utils.PerfUtils
 
 case class Damysos(private val geoTrie: Node = Node()) {
 
@@ -29,8 +28,6 @@ case class Damysos(private val geoTrie: Node = Node()) {
     makePath(-90, coordinates.latitude) // Latitude spans from -90 (90N) to 90 (90S)
       .zip(makePath(-180, coordinates.longitude)) // Longitude spans from -180 (180W) to 180 (180E)
 
-  private val DefaultPrecision = 6
-
   def toArray: Array[PointOfInterst] = geoTrie.toArray
 
   lazy val size: Int = geoTrie.size
@@ -42,10 +39,7 @@ case class Damysos(private val geoTrie: Node = Node()) {
       case _                => false
     }
 
-  def findSurrounding(
-    coordinates: Coordinates,
-    precision: Int = DefaultPrecision
-  ): Array[PointOfInterst] =
+  def findSurrounding(coordinates: Coordinates, precision: Int = 6): Array[PointOfInterst] =
     geoTrie.findLeaf(latLongPath(coordinates).take(precision)) match {
       case Some(node: Node) => node.toArray
       case _                => Array()

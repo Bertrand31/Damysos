@@ -2,12 +2,12 @@ package damysos
 
 case class Coordinates(
   latitude: Double,
-  longitude: Double
+  longitude: Double,
 )
 
 case class PointOfInterst(
   name: String,
-  coordinates: Coordinates
+  coordinates: Coordinates,
 )
 
 object PointOfInterst {
@@ -17,7 +17,7 @@ object PointOfInterst {
       name=arr(0),
       coordinates=Coordinates(
         latitude=arr(1).toDouble,
-        longitude=arr(2).toDouble
+        longitude=arr(2).toDouble,
       )
     )
 
