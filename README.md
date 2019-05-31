@@ -1,6 +1,7 @@
 # Damysos
 
 [![codecov](https://codecov.io/gh/Bertrand31/Damysos/branch/master/graph/badge.svg)](https://codecov.io/gh/Bertrand31/Damysos)
+[![TravisCI](https://api.travis-ci.com/Bertrand31/Damysos.svg?branch=master)](https://travis-ci.com/Bertrand31/Damysos)
 
 - [Overview](#overview)
 - [Performance](#performance)
