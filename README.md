@@ -2,6 +2,11 @@
 
 [![codecov](https://codecov.io/gh/Bertrand31/Damysos/branch/master/graph/badge.svg)](https://codecov.io/gh/Bertrand31/Damysos)
 
+- [Oerview](#overview)
+- [Performance](#performance)
+- [Usage](#usage)
+- [Caveats](#caveats)
+## Overview
 
 Damysos is an experiment stemming from the idea that tries could be used to store points in a
 n-dimensional space in a way that would allow for fast querying of "neighboring" points.
@@ -14,15 +19,36 @@ For example, if point A's encoded abscissa coordinate is "111", point B's is "11
 "100", we can tell that point A is closer to point B than it is of point C and point C is closer to
 point A than it is of point B (along the aformentionned abscissa).
 
-This way, in order to get the neighboring points of a GPS coordinate, we only have to compute the
+This way, in order to get the neighboring points of a coordinate, we only have to compute the
 "trie path" for those coordinates, and descend the trie at the desired depth (the level of
 precision, or "zoom"). Then, we take all the leaves below that point.
+
+This would work well if we were storing monodimensional points. But, in our case, we chose to store
+GPS coordinates, which are by nature bi-dimensional. To go from 1-dimensional coordinates to
+n-dimensional coordinates while still maintaining the same level of performance, I had to come up
+with a n-dimensional trie. It is basically a trie that, in each node, holds a n-dimensional array
+representing each possible n-dimensional value of a n-dimensional path.
+
+Because this may seem very abstract, we simply need to compare it to a normal trie: in a normal trie,
+a "path" would be a word. For the word "foo", the path would be `List("f", "o", "o")`.
+Now in a 2-dimensional trie, a path would look something like this: `List((1, 6), (4, 2), ...)`.
+Notice we have tuples now, because each step of the path is 2-dimensional.
+
+The implementation of this n-dimensional trie is found in
+[GeoTrie.scala](src/main/scala/damysos/GeoTrie.scala). However for the sake of simplicity and
+because of the specificity of our use-case (GPS coordinates), GeoTrie is actually
+a 2-dimensional trie. In the future, I might extract it into a separate project and really make it
+n-dimensional (taking n as a constructor parameter) but as far as Damysos is concerned, there's no
+point in doing that.
 
 What's interesting in this approach, in my opinion, resides in the fact that nowhere in the code we
 are actually commparing GPS coordinates, calculating distances etc. The data structure itself, in
 this case a Trie, _is_ the logic.
 
-Here are the results of running the PerfSpec class on a laptop with an
+
+## Performance
+
+Here are the results of running the `PerfSpec` class on a laptop with an
 _Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **1 673 997** points:
 ```
 ============================
@@ -45,7 +71,7 @@ The speed of that search, however, depends on the level of precision (or "zoom")
 achieve.  Although it may appear counter intuitive, a lower precision actually means a longer query
 time. This is because, if we are using tries 10 levels deeps and we ask for a precision of 5, then
 we'll descend 5 levels of the trie (very fast, and tail-recursive) and then explore all the branches
-below that point to get all the points underneath it.
+below that point to get all the points underneath it (that's the slower part).
 Hence, the lower the precision, the less we descend the trie before we start exploring all of its
 sub-tries, so the more branches we'll have to explore from that point.
 
