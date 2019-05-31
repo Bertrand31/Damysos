@@ -48,13 +48,19 @@ class DamysosSpec extends FlatSpec {
       val parisCoordinates = Coordinates(2.3522219, 48.856614)
       damysosFrance.findSurrounding(parisCoordinates)
     }
-    assert(franceMatches.size == 91)
+    assert(franceMatches.size === 91)
 
     val worldMatches = PerfUtils.time[Array[PointOfInterst]]("Searching in World dataset") {
       val singaporeCoordinates = Coordinates(1.28967, 103.85007)
       damysosWorld.findSurrounding(singaporeCoordinates, 5)
     }
-    assert(worldMatches.size == 13)
+    assert(worldMatches.size === 13)
+
+    val noMatches = PerfUtils.time[Array[PointOfInterst]]("Searching in World dataset") {
+      val sampleCoordinates = Coordinates(90, 33)
+      damysosWorld.findSurrounding(sampleCoordinates, 5)
+    }
+    assert(noMatches.size === 0)
   }
 
   it should "return a list of all the contents" in {
@@ -71,20 +77,20 @@ class DamysosSpec extends FlatSpec {
     val damysosFranceSize = PerfUtils.time[Int]("Counting the elements in France dataset") {
       damysosFrance.size
     }
-    assert(damysosFranceSize == 36318)
+    assert(damysosFranceSize === 36318)
 
     val damysosWorldSize = PerfUtils.time[Int]("Counting the elements in World dataset") {
       damysosWorld.size
     }
-    assert(damysosWorldSize == 128769)
+    assert(damysosWorldSize === 128769)
   }
 
   it should "remove an element" in {
     val paris = PointOfInterst("Paris", Coordinates(2.3522219, 48.856614))
     val tempDamysos = Damysos() + paris
-    assert(tempDamysos.size == 1)
+    assert(tempDamysos.size === 1)
     val emptyDamysos = tempDamysos - paris
-    assert(emptyDamysos.size == 0)
+    assert(emptyDamysos.size === 0)
   }
 
   it should "remove multiple elements" in {
@@ -92,8 +98,8 @@ class DamysosSpec extends FlatSpec {
     val singapore = PointOfInterst("Singapore", Coordinates(1.28967, 103.85007))
     val data = Seq(paris, singapore)
     val tempDamysos = Damysos() ++ data
-    assert(tempDamysos.size == 2)
+    assert(tempDamysos.size === 2)
     val emptyDamysos = tempDamysos -- data
-    assert(emptyDamysos.size == 0)
+    assert(emptyDamysos.size === 0)
   }
 }
