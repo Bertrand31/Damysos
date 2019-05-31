@@ -6,6 +6,7 @@
 - [Performance](#performance)
 - [Usage](#usage)
 - [Caveats](#caveats)
+
 ## Overview
 
 Damysos is an experiment stemming from the idea that tries could be used to store points in a
@@ -44,7 +45,6 @@ point in doing that.
 What's interesting in this approach, in my opinion, resides in the fact that nowhere in the code we
 are actually commparing GPS coordinates, calculating distances etc. The data structure itself, in
 this case a Trie, _is_ the logic.
-
 
 ## Performance
 
@@ -118,7 +118,7 @@ damysos.toList
 damysos.size
 ```
 
- ## Caveats
+## Caveats
 
 Because of the way tries work and of the encoding of coordinates, when we're nearing a "breakoff
 point" of the base we have chosen, the trie won't "see" anything that is geographically close, but

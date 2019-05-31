@@ -39,16 +39,17 @@ case class Damysos(private val geoTrie: Node = Node()) {
   def contains(point: PointOfInterst): Boolean =
     geoTrie.findLeaf(latLongPath(point.coordinates)) match {
       case Some(leaf: Leaf) => leaf.locations.contains(point)
-      case _ => false
+      case _                => false
     }
 
   def findSurrounding(
     coordinates: Coordinates,
     precision: Int = DefaultPrecision
   ): Array[PointOfInterst] =
-    this.geoTrie
-      .findLeaf(latLongPath(coordinates).take(precision))
-      .collect({ case node: Node => node.toArray }).getOrElse(Array())
+    geoTrie.findLeaf(latLongPath(coordinates).take(precision)) match {
+      case Some(node: Node) => node.toArray
+      case _                => Array()
+    }
 
   def +(item: PointOfInterst): Damysos =
     this.copy(geoTrie=geoTrie.insertAtPath(item, latLongPath(item.coordinates)))
