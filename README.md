@@ -2,6 +2,7 @@
 
 [![codecov](https://codecov.io/gh/Bertrand31/Damysos/branch/master/graph/badge.svg)](https://codecov.io/gh/Bertrand31/Damysos)
 [![TravisCI](https://api.travis-ci.com/Bertrand31/Damysos.svg?branch=master)](https://travis-ci.com/Bertrand31/Damysos)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b19c781500ef4434af54a6699892efcf)](https://www.codacy.com/app/bertrandjun/Damysos)
 
 - [Overview](#overview)
 - [Performance](#performance)
