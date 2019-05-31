@@ -53,18 +53,18 @@ _Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **1 673 997** points:
 ```
 ============================
 Profiling Damysos search:
-Cold run        71 704 ns
-Max hot         49 756 ns
-Min hot         18 328 ns
-Avg hot         24 752 ns
+Cold run        42 834 ns
+Max hot         31 382 ns
+Min hot         15 642 ns
+Avg hot         17 693 ns
 ============================
 Profiling Linear search:
-Cold run        22 023 930 ns
-Max hot         18 443 829 ns
-Min hot         17 970 324 ns
-Avg hot         18 248 915 ns
+Cold run        25 536 491 ns
+Max hot         20 351 186 ns
+Min hot         18 846 736 ns
+Avg hot         19 526 954 ns
 ```
-As you can see, it is more than 700 times faster than a linear search. And the bigger the dataset,
+As you can see, it is more than 1000 times faster than a linear search. And the bigger the dataset,
 the bigger the performance gap.
 
 The speed of that search, however, depends on the level of precision (or "zoom") you want to
