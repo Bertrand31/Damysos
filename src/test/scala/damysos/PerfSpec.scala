@@ -23,7 +23,7 @@ class PerfSpec extends FlatSpec {
         )
       )
     )
-    println(augmentedData.length)
+    println(s"Size of dataset: ${augmentedData.length}")
 
     val damysos = Damysos() ++ augmentedData
     val singapore = Coordinates(1.28967, 103.85007)
@@ -42,7 +42,7 @@ class PerfSpec extends FlatSpec {
     println(res1.map(_.name).mkString(", "))
 
     val timesFaster = linearTime / damysosTime
-    println(timesFaster)
-    assert(timesFaster > 600)
+    println(s"$timesFaster times faster")
+    assert(timesFaster > 1000)
   }
 }
