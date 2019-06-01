@@ -12,13 +12,13 @@ object PerfUtils {
   }
 
   def profile(id: String)(block: => Any): Long = {
-    def print_result(s: String, ns: Long) = {
+    def print_result(s: String, ns: Long) {
       val format = java.text.NumberFormat.getIntegerInstance.format(_: Long)
       println(s.padTo(16, " ").mkString + format(ns) + " ns")
     }
 
     var tmpTime = 0L
-    val runtimes = (0 to 10).map(i => {
+    val runtimes = (0 to 1000).map(i => {
       tmpTime = System.nanoTime
       block
       System.nanoTime - tmpTime

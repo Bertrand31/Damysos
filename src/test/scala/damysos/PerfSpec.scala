@@ -24,6 +24,7 @@ class PerfSpec extends FlatSpec {
       )
     )
     println(augmentedData.length)
+
     val damysos = Damysos() ++ augmentedData
     val singapore = Coordinates(1.28967, 103.85007)
 
