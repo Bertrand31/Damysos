@@ -1,11 +1,12 @@
 package damysos
 
 import scala.annotation.tailrec
+import Constants._
 
 protected sealed trait GeoTrie
 protected final case class Leaf(locations: Array[PointOfInterst] = Array()) extends GeoTrie
 protected final case class Node(
-  private val children: Array[Array[GeoTrie]] = Array.fill(4)(Array.ofDim(4))
+  private val children: Array[Array[GeoTrie]] = Array.fill(TreeBreadth)(Array.ofDim(TreeBreadth))
 ) extends GeoTrie {
 
   def toArray: Array[PointOfInterst] =

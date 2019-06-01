@@ -2,21 +2,22 @@ package damysos
 
 import utils.MathUtils
 
-object Constants {
+private object Constants {
 
   val LatitudeAmp = 90 // Latitude spans from -90 (90N) to 90 (90S)
   val LongitudeAmp = 180 // Longitude spans from -180 (180W) to 180 (180E)
   val MaxCoordinateValue: Long = Math.max(LatitudeAmp, LongitudeAmp) * 2
   val DefaultSearchPrecision = 6
+
+  // The lower the breadth, the deeper the tree and thus, the more precision levels available.
+  val TreeBreadth = 4
+  val GPSDecimals = 6
 }
 
 case class Damysos(private val geoTrie: Node = Node()) {
 
   import Constants._
 
-  // The lower the breadth, the deeper the tree and thus, the more precision levels available.
-  private val TreeBreadth = 4
-  private val GPSDecimals = 6
   // 360 is the maximum value a GPS coordinate can take. So it is the trie depth we need.
   private val TreeDepth =
     MathUtils.toBase(TreeBreadth, MaxCoordinateValue * Math.pow(10, GPSDecimals).toLong).length
