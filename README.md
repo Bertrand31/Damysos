@@ -4,10 +4,10 @@
 [![TravisCI](https://api.travis-ci.com/Bertrand31/Damysos.svg?branch=master)](https://travis-ci.com/Bertrand31/Damysos)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b19c781500ef4434af54a6699892efcf)](https://www.codacy.com/app/bertrandjun/Damysos)
 
-- [Overview](#overview)
-- [Performance](#performance)
-- [Usage](#usage)
-- [Caveats](#caveats)
+  - [Overview](#overview)
+  - [Performance](#performance)
+  - [Usage](#usage)
+  - [Caveats](#caveats)
 
 ## Overview
 
@@ -52,7 +52,7 @@ this case a Trie, _is_ the logic.
 
 Here are the results of running the `PerfSpec` class on a laptop with an
 _Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **1 673 997** points:
-```
+```text
 ============================
 Profiling Damysos search:
 Cold run        42 834 ns
