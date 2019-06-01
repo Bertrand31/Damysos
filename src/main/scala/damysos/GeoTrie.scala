@@ -4,13 +4,13 @@ import scala.annotation.tailrec
 import Constants._
 
 protected sealed trait GeoTrie
-protected final case class Leaf(locations: Array[PointOfInterst] = Array()) extends GeoTrie
+protected final case class Leaf(locations: Array[PointOfInterest] = Array()) extends GeoTrie
 protected final case class Node(
   private val children: Array[Array[GeoTrie]] = Array.fill(TreeBreadth)(Array.ofDim(TreeBreadth))
 ) extends GeoTrie {
 
-  def toArray: Array[PointOfInterst] =
-    children.foldLeft(Array[PointOfInterst]())((acc, arr) =>
+  def toArray: Array[PointOfInterest] =
+    children.foldLeft(Array[PointOfInterest]())((acc, arr) =>
       arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
           case node: Node      => acc2 ++ node.toArray
@@ -56,7 +56,7 @@ protected final case class Node(
         }
     }
 
-  private def updateAtPath(fn: Array[PointOfInterst] => Array[PointOfInterst])
+  private def updateAtPath(fn: Array[PointOfInterest] => Array[PointOfInterest])
                           (path: List[(Int, Int)], node: Node): Node =
     path match {
       case head +: Nil => {
@@ -95,9 +95,9 @@ protected final case class Node(
       }
     }
 
-  def insertAtPath(item: PointOfInterst, path: List[(Int, Int)], node: Node = this): Node =
+  def insertAtPath(item: PointOfInterest, path: List[(Int, Int)], node: Node = this): Node =
     updateAtPath(_ :+ item)(path, node)
 
-  def removeAtPath(item: PointOfInterst, path: List[(Int, Int)], node: Node = this): Node =
+  def removeAtPath(item: PointOfInterest, path: List[(Int, Int)], node: Node = this): Node =
     updateAtPath(_.filter(_ != item))(path, node)
 }

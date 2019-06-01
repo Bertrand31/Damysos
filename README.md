@@ -85,23 +85,23 @@ sub-tries, so the more branches we'll have to explore from that point.
 
 ## Usage
 
-First, create a Damysos instance. Then, feed it multiple `PointOfInterst` to add data to it:
+First, create a Damysos instance. Then, feed it multiple `PointOfInterest` to add data to it:
 ```scala
 import damysos.Damysos
 
 val damysos = Damysos()
-val paris = PointOfInterst("Paris" Coordinates(43.2D, -80.38333D))
-val toulouse = PointOfInterst("Toulouse" Coordinates(43.60426D, 1.44367D))
+val paris = PointOfInterest("Paris" Coordinates(43.2D, -80.38333D))
+val toulouse = PointOfInterest("Toulouse" Coordinates(43.60426D, 1.44367D))
 val pointsOfInterest = Seq(paris, toulouse)
-val bayonne = PointOfInterst("Bayonne", Coordinates(43.48333D, -1.48333D))
+val bayonne = PointOfInterest("Bayonne", Coordinates(43.48333D, -1.48333D))
 damysos ++ pointsOfInterest + bayonne
 ```
 The `++` method accepts a `TraversableOnce` argument, it means you can feed it either a normal
 `Collection` (like the `Seq` above) or a lazy `Iterator`:
 ```scala
-import damysos.PointOfInterst
+import damysos.PointOfInterest
 
-val data: Iterator[PointOfInterst] = PointOfInterst.loadFromCSV("cities_world.csv")
+val data: Iterator[PointOfInterest] = PointOfInterest.loadFromCSV("cities_world.csv")
 damysos ++ data // Lines will be pulled one by one from the CSV file to be added to the Damysos
 ```
 From there, we can start querying our data structure:
@@ -128,8 +128,8 @@ damysos.size
 
 ## Caveats
 
-Because of the way tries work and of the encoding of coordinates, when we're nearing a "breakoff
-point" of the base we have chosen, the trie won't "see" anything that is geographically close, but
+Because of the way tries work and the encoding of coordinates, when we're nearing a "breakoff point"
+of the base we have chosen, the trie won't "see" anything that is geographically close, but
 which key is right after this breakoff point.
 
 For example, the paths "333" and "400" have nothing in common as far as a trie is concerned and yet,

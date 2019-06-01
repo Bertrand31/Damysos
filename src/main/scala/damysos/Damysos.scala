@@ -38,32 +38,32 @@ case class Damysos(private val geoTrie: Node = Node()) {
   private def latLongPath(coordinates: Coordinates): List[(Int, Int)] =
     makePath(LatitudeAmp, coordinates.latitude) zip makePath(LongitudeAmp, coordinates.longitude)
 
-  def toArray: Array[PointOfInterst] = geoTrie.toArray
+  def toArray: Array[PointOfInterest] = geoTrie.toArray
 
   lazy val size: Int = geoTrie.size
 
-  def contains(point: PointOfInterst): Boolean =
+  def contains(point: PointOfInterest): Boolean =
     geoTrie.findLeaf(latLongPath(point.coordinates)) match {
       case Some(leaf: Leaf) => leaf.locations.contains(point)
       case _                => false
     }
 
   def findSurrounding(coordinates: Coordinates,
-                      precision: Int = DefaultSearchPrecision): Array[PointOfInterst] =
+                      precision: Int = DefaultSearchPrecision): Array[PointOfInterest] =
     geoTrie.findLeaf(latLongPath(coordinates).take(precision)) match {
       case Some(node: Node) => node.toArray
       case _                => Array()
     }
 
-  def +(item: PointOfInterst): Damysos =
+  def +(item: PointOfInterest): Damysos =
     this.copy(geoTrie=geoTrie.insertAtPath(item, latLongPath(item.coordinates)))
 
   // TraversableOnce encompasses both normal collections and Iterator. So this method can be used
   // either with a normal collection or a lazy one, like reading from a file line by line.
-  def ++(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ + _)
+  def ++(items: TraversableOnce[PointOfInterest]): Damysos = items.foldLeft(this)(_ + _)
 
-  def -(item: PointOfInterst): Damysos =
+  def -(item: PointOfInterest): Damysos =
     this.copy(geoTrie=geoTrie.removeAtPath(item, latLongPath(item.coordinates)))
 
-  def --(items: TraversableOnce[PointOfInterst]): Damysos = items.foldLeft(this)(_ - _)
+  def --(items: TraversableOnce[PointOfInterest]): Damysos = items.foldLeft(this)(_ - _)
 }
