@@ -1,8 +1,12 @@
 # Damysos
 
+![GitHub release](https://img.shields.io/github/release/Bertrand31/Damysos.svg)
+![GitHub Release Date](https://img.shields.io/github/release-date/Bertrand31/Damysos.svg)
 [![codecov](https://codecov.io/gh/Bertrand31/Damysos/branch/master/graph/badge.svg)](https://codecov.io/gh/Bertrand31/Damysos)
 [![TravisCI](https://api.travis-ci.com/Bertrand31/Damysos.svg?branch=master)](https://travis-ci.com/Bertrand31/Damysos)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b19c781500ef4434af54a6699892efcf)](https://www.codacy.com/app/bertrandjun/Damysos)
+![GitHub issues](https://img.shields.io/github/issues/Bertrand31/Damysos.svg)
+![GitHub](https://img.shields.io/github/license/Bertrand31/Damysos.svg)
 
 - [Overview](#overview)
 - [Performance](#performance)
@@ -35,7 +39,9 @@ representing each possible n-dimensional value of a n-dimensional path.
 Because this may seem very abstract, we simply need to compare it to a normal trie: in a normal trie,
 a "path" would be a word. For the word "foo", the path would be `List("f", "o", "o")`.
 Now in a 2-dimensional trie, a path would look something like this: `List((1, 6), (4, 2), ...)`.
-Notice we have tuples now, because each step of the path is 2-dimensional.
+Notice we have tuples now, because each step of the path is 2-dimensional. I have replaced
+characters with numbers simply because at this point, we're already far enough from the usual,
+word-searching use-case of the usual Trie that we can stop pretending :)
 
 The implementation of this n-dimensional trie is found in
 [GeoTrie.scala](src/main/scala/damysos/GeoTrie.scala). However for the sake of simplicity and
