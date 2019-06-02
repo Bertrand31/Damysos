@@ -50,7 +50,7 @@ case class Damysos(private val geoTrie: Node = Node()) {
 
   def findSurrounding(coordinates: Coordinates,
                       precision: Int = DefaultSearchPrecision): Array[PointOfInterest] =
-    geoTrie.findLeaf(latLongPath(coordinates).take(precision)) match {
+    geoTrie.findLeaf(latLongPath(coordinates) take precision) match {
       case Some(node: Node) => node.toArray
       case _                => Array()
     }
