@@ -15,7 +15,7 @@ class PerfSpec extends FlatSpec {
 
   "Damysos search" should "be orders or magnitude faster then a naive linear search" in {
     val cities = PointOfInterest.loadFromCSV("world_cities.csv").toList
-    val augmentedData = (0 to 12).flatMap(i =>
+    val augmentedData = (0 to 20).flatMap(i =>
       cities.map(poi =>
         poi.copy(
           name = poi.name + i,
@@ -23,16 +23,9 @@ class PerfSpec extends FlatSpec {
         )
       )
     )
-    println(s"Size of dataset: ${augmentedData.length}")
+    println(s"Items in dataset: ${augmentedData.length}")
 
-    val damysos = Damysos() ++ augmentedData
     val singapore = Coordinates(1.28967, 103.85007)
-
-    var res2 = Array[PointOfInterest]()
-    val damysosTime = PerfUtils.profile("Damysos search") {
-      res2 = damysos.findSurrounding(singapore)
-    }
-    println(res2.map(_.name).mkString(", "))
 
     var res1 = List[PointOfInterest]()
     val augmentedDataList = augmentedData.toList
@@ -40,6 +33,14 @@ class PerfSpec extends FlatSpec {
       res1 = linearSearch(augmentedDataList, singapore)
     }
     println(res1.map(_.name).mkString(", "))
+
+    val damysos = Damysos() ++ augmentedData
+
+    var res2 = Array[PointOfInterest]()
+    val damysosTime = PerfUtils.profile("Damysos search") {
+      res2 = damysos.findSurrounding(singapore)
+    }
+    println(res2.map(_.name).mkString(", "))
 
     val timesFaster = linearTime / damysosTime
     println(s"$timesFaster times faster")
