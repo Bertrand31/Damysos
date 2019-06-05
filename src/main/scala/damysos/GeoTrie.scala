@@ -56,6 +56,17 @@ protected final case class Node(
         }
     }
 
+  // Helper function to update a node's child at the given coordinates.
+  private def nodeItemUpdate(node: Node, latIndex: Int, longIndex: Int, item: GeoTrie): Node =
+    node.copy(
+      children=node.children.updated(
+        latIndex,
+        node.children(latIndex).updated(longIndex, item)
+      )
+    )
+
+  // Descends the given path (creates it if necessary), and applies the given function to the Leaf
+  // at the end of that path (or the Leaf it created there, if the path didn't exist fully).
   private def updateAtPath(fn: Array[PointOfInterest] => Array[PointOfInterest])
                           (path: List[(Int, Int)], node: Node): Node =
     path match {
@@ -69,12 +80,7 @@ protected final case class Node(
             }
           else Leaf()
         }
-        node.copy(
-          children=node.children.updated(
-            latIndex,
-            node.children(latIndex).updated(longIndex, leaf.copy(fn(leaf.locations)))
-          )
-        )
+        nodeItemUpdate(node, latIndex, longIndex, leaf.copy(fn(leaf.locations)))
       }
       case head +: tail => {
         val (latIndex, longIndex) = head
@@ -86,12 +92,7 @@ protected final case class Node(
             }
           else Node()
         }
-        node.copy(
-          children=node.children.updated(
-            latIndex,
-            node.children(latIndex).updated(longIndex, updateAtPath(fn)(tail, subNode))
-          )
-        )
+        nodeItemUpdate(node, latIndex, longIndex, updateAtPath(fn)(tail, subNode))
       }
     }
 

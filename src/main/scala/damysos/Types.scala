@@ -18,7 +18,7 @@ object PointOfInterest {
       coordinates=Coordinates(
         latitude=arr(1).toDouble,
         longitude=arr(2).toDouble,
-      )
+      ),
     )
 
   def loadFromCSV(filename: String): Iterator[PointOfInterest] =
