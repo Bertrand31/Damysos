@@ -12,13 +12,13 @@ object PerfUtils {
   }
 
   def profile(id: String)(block: => Any): Long = {
-    def print_result(s: String, ns: Long) {
+    def print_result(s: String, ns: Long): Unit = {
       val format = java.text.NumberFormat.getIntegerInstance.format(_: Long)
       println(s.padTo(16, " ").mkString + format(ns) + " ns")
     }
 
     var tmpTime = 0L
-    val runtimes = (0 to 1000).map(i => {
+    val runtimes = (0 to 50000).map(_ => {
       tmpTime = System.nanoTime
       block
       System.nanoTime - tmpTime
@@ -27,8 +27,9 @@ object PerfUtils {
     println("============================")
     println(s"Profiling $id:")
 
+
     print_result("Cold run", runtimes.head)
-    val hotRuns = runtimes.tail
+    val hotRuns = runtimes.drop(runtimes.length / 2)
     print_result("Max hot", hotRuns.max)
     print_result("Min hot", hotRuns.min)
     val avg = hotRuns.sum / hotRuns.length
