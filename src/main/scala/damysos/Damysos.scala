@@ -10,6 +10,7 @@ private object Constants {
   val DefaultSearchPrecision = 6
 
   // The lower the breadth, the deeper the tree and thus, the more precision levels available.
+  // Whatever breadth we use, that will be the base in which we encode the coordinates.
   val TreeBreadth = 4
   val GPSDecimals = 6
 }
@@ -25,13 +26,11 @@ case class Damysos(private val geoTrie: Node = Node()) {
   // Returns an `TreeDepth`-characters-long base-`TreeBreadth` number as a String
   private def toPaddedBase(base: Int, number: Double): String =
     MathUtils.toBase(base, Math.round(number * Math.pow(10, GPSDecimals).toLong))
-      .split("")
       .reverse
       // We need to pad the numbers to ensure all the paths have the same length i.e. all of the
       // trie's leaves are on the same level: at the edges of the 3-simplex the GeoTrie is).
-      .padTo(TreeDepth, "0")
+      .padTo(TreeDepth, '0')
       .reverse
-      .mkString
 
   private def makePath(amplitude: Int, coordinate: Double): List[Int] =
     toPaddedBase(TreeBreadth, coordinate + amplitude)

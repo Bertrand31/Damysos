@@ -124,7 +124,7 @@ damysos -- data
 It also supports returning all of its contents as a `List` and lastly, counting the number of
 elements it contains:
 ```scala
-damysos.toList
+damysos.toArray
 damysos.size
 ```
 
