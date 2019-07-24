@@ -6,7 +6,7 @@ import Constants._
 protected sealed trait GeoTrie
 protected final case class Leaf(locations: Array[PointOfInterest] = Array()) extends GeoTrie
 protected final case class Node(
-  private val children: Array[Array[GeoTrie]] = Array.fill(TreeBreadth)(Array.ofDim(TreeBreadth))
+  private val children: Array[Array[GeoTrie]] = Array.fill(TreeBreadth)(Array.ofDim(TreeBreadth)),
 ) extends GeoTrie {
 
   def toArray: Array[PointOfInterest] =
@@ -61,7 +61,7 @@ protected final case class Node(
     node.copy(
       children=node.children.updated(
         latIndex,
-        node.children(latIndex).updated(longIndex, item)
+        node.children(latIndex).updated(longIndex, item),
       )
     )
 

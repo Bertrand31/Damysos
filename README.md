@@ -57,22 +57,22 @@ this case a Trie, _is_ the logic.
 ## Performance
 
 Here are the results of running the `PerfSpec` class on a laptop with an
-_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **2 704 149** points:
+_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **5 021 991** points:
 ```text
 ============================
-Profiling Linear search:
-Cold run        40 418 123 ns
-Max hot         43 043 299 ns
-Min hot         23 121 176 ns
-Avg hot         24 826 946 ns
-============================
 Profiling Damysos search:
-Cold run        2 100 769 ns
-Max hot         70 293 ns
-Min hot         10 668 ns
-Avg hot         12 288 ns
+Cold run        1 023 101 ns
+Max hot         106 856 ns
+Min hot         5 024 ns
+Med hot         5 129 ns
+============================
+Profiling Linear search:
+Cold run        74 791 419 ns
+Max hot         75 872 336 ns
+Min hot         46 204 712 ns
+Med hot         46 579 271 ns
 
-2020 times faster
+9081 times faster
 ```
 As you can see, it is orders of magnitude faster than a linear search. And the bigger the dataset,
 the bigger the performance gap.

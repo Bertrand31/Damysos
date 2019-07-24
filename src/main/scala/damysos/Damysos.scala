@@ -62,12 +62,12 @@ case class Damysos(private val geoTrie: Node = Node()) {
   def +(item: PointOfInterest): Damysos =
     this.copy(geoTrie=geoTrie.insertAtPath(item, latLongPath(item.coordinates)))
 
-  // TraversableOnce encompasses both normal collections and Iterator. So this method can be used
+  // IterableOnce encompasses both normal collections and Iterator. So this method can be used
   // either with a normal collection or a lazy one, like reading from a file line by line.
-  def ++(items: TraversableOnce[PointOfInterest]): Damysos = items.foldLeft(this)(_ + _)
+  def ++(items: IterableOnce[PointOfInterest]): Damysos = items.iterator.foldLeft(this)(_ + _)
 
   def -(item: PointOfInterest): Damysos =
     this.copy(geoTrie=geoTrie.removeAtPath(item, latLongPath(item.coordinates)))
 
-  def --(items: TraversableOnce[PointOfInterest]): Damysos = items.foldLeft(this)(_ - _)
+  def --(items: IterableOnce[PointOfInterest]): Damysos = items.iterator.foldLeft(this)(_ - _)
 }
