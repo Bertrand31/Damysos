@@ -6,7 +6,7 @@ object PerfUtils {
     val startTime = System.nanoTime
     val result = block
     val elapsedMicro = Math.round((System.nanoTime() - startTime) / 1000)
-    val elapsedStr = if (elapsedMicro > 5000) elapsedMicro / 1000 + "ms" else elapsedMicro + "us"
+    val elapsedStr = if (elapsedMicro > 5000) s"${elapsedMicro / 1000}ms" else s"${elapsedMicro}us"
     println(s"$id took $elapsedStr")
     result
   }
@@ -29,11 +29,11 @@ object PerfUtils {
 
 
     print_result("Cold run", runtimes.head)
-    val hotRuns = runtimes.drop(runtimes.length / 2)
-    print_result("Max hot", hotRuns.max)
-    print_result("Min hot", hotRuns.min)
-    val avg = hotRuns.sum / hotRuns.length
-    print_result("Avg hot", avg)
-    avg
+    val sortedHotRuns = runtimes.drop(Math.floor(runtimes.length / 2).toInt).sorted
+    print_result("Max hot", sortedHotRuns.last)
+    print_result("Min hot", sortedHotRuns.head)
+    val median = sortedHotRuns(Math.floor(sortedHotRuns.length / 2).toInt)
+    print_result("Med hot", median)
+    median
   }
 }
