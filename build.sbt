@@ -1,6 +1,6 @@
 name := "Damysos"
 
-version := "1"
+version := "2"
 
 scalaVersion := "2.13.0"
 
