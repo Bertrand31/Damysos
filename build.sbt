@@ -2,14 +2,14 @@ name := "Damysos"
 
 version := "2"
 
-scalaVersion := "2.13.0"
+scalaVersion := "2.13.1"
 
 // SBT scoverage settings
 coverageMinimum := 95
 coverageFailOnMinimum := true
 
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "2.0.0-M4",
+  "org.typelevel" %% "cats-core" % "2.0.0",
   "org.scalatest" %% "scalatest" % "3.0.8",
 )
 
