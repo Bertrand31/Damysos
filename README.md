@@ -124,7 +124,7 @@ It also supports removing single element or a `TraversableOnce` of elements:
 damysos - paris
 damysos -- data
 ```
-It also supports returning all of its contents as a `List` and lastly, counting the number of
+It also supports returning all of its contents as an `Array` and lastly, counting the number of
 elements it contains:
 ```scala
 damysos.toArray
