@@ -57,25 +57,28 @@ this case a Trie, _is_ the logic.
 ## Performance
 
 Here are the results of running the `PerfSpec` class on a laptop with an
-_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **5 021 991** points:
+_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **6 567 219** points:
 ```text
 ============================
 Profiling Damysos search:
-Cold run        1 023 101 ns
-Max hot         106 856 ns
-Min hot         5 024 ns
-Med hot         5 129 ns
+Cold run        36 060 ns
+Max hot         29 803 ns
+Min hot         1 357 ns
+Med hot         1 488 ns
+
 ============================
 Profiling Linear search:
-Cold run        74 791 419 ns
-Max hot         75 872 336 ns
-Min hot         46 204 712 ns
-Med hot         46 579 271 ns
+Cold run        55 652 544 ns
+Max hot         55 673 863 ns
+Min hot         41 063 697 ns
+Med hot         41 468 949 ns
 
-9081 times faster
+27868 times faster
 ```
-As you can see, it is orders of magnitude faster than a linear search. And the bigger the dataset,
-the bigger the performance gap.
+As you can see, it is orders of magnitude faster than a linear search. This is because the Damysos
+trie has a fixed height ; the amount of data we add to it has no influence over its depth or
+structure. Retrieving neighbouring points takes constant time (`Θ(1)`), thus the more data we have,
+the bigger the gap with the naïve, linear search.
 
 The speed of that search, however, depends on the level of precision (or "zoom") you want to
 achieve.  Although it may appear counter intuitive, a lower precision actually means a longer query

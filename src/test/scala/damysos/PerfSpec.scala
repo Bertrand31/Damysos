@@ -1,5 +1,6 @@
 import org.scalatest.FlatSpec
 import utils.PerfUtils
+import scala.util.Random
 import damysos.{Coordinates, PointOfInterest, Damysos}
 import damysos.PointOfInterest
 
@@ -15,11 +16,11 @@ class PerfSpec extends FlatSpec {
 
   "Damysos search" should "be orders or magnitude faster then a naive linear search" in {
     val cities = PointOfInterest.loadFromCSV("world_cities.csv").toList
-    val augmentedData = (0 to 38).flatMap(i =>
+    val augmentedData = (0 to 50).flatMap(i =>
       cities.map(poi =>
         poi.copy(
           name = poi.name + i,
-          coordinates = Coordinates(poi.coordinates.latitude + i, poi.coordinates.longitude + i)
+          coordinates = Coordinates(Random.between(-90, 90), Random.between(-180, 180))
         )
       )
     )
