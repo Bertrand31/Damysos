@@ -145,3 +145,7 @@ that is after of before the aforementionned "breakup points".
 
 **This is why Damysos' goal is not to reliably provide exhaustive results, but rather return _some_
 neighboring points, as quickly as possible.**
+
+For this reason, it should be considered a probabilistic data structure: the surrounding points that
+get returned are definitely neighbours of the coordinates you entered (no false positives), however,
+ those results may very well be incomplete (false negatives).
