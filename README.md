@@ -82,7 +82,7 @@ the bigger the gap with the naïve, linear search.
 
 The speed of that search, however, depends on the level of precision (or "zoom") you want to
 achieve.  Although it may appear counter intuitive, a lower precision actually means a longer query
-time. This is because, if we are using tries 10 levels deeps and we ask for a precision of 5, then
+time. This is because, if we are using tries 10 levels deep and we ask for a precision of 5, then
 we'll descend 5 levels of the trie (very fast, and tail-recursive) and then explore all the branches
 below that point to get all the points underneath it (that's the slower part).
 Hence, the lower the precision, the less we descend the trie before we start exploring all of its
