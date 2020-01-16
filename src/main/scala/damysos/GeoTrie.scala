@@ -32,9 +32,9 @@ protected final case class Node(
     )
 
   @tailrec
-  def findLeaf(path: List[(Int, Int)], trie: GeoTrie = this): Option[GeoTrie] =
+  def findLeaf(path: Array[(Int, Int)], trie: GeoTrie = this): Option[GeoTrie] =
     path match {
-      case head +: Nil =>
+      case Array(head) =>
         trie match {
           case Node(children) => {
             val (latIndex, longIndex) = head
@@ -44,12 +44,12 @@ protected final case class Node(
           }
           case _ => None
         }
-      case head +: tail =>
+      case Array(head, tail@_*) =>
         trie match {
           case Node(children) => {
             val (latIndex, longIndex) = head
             if (children(latIndex).isDefinedAt(longIndex))
-              findLeaf(tail, children(latIndex)(longIndex))
+              findLeaf(tail.toArray, children(latIndex)(longIndex))
             else None
           }
           case _ => None
@@ -68,9 +68,9 @@ protected final case class Node(
   // Descends the given path (creates it if necessary), and applies the given function to the Leaf
   // at the end of that path (or the Leaf it created there, if the path didn't exist fully).
   private def updateAtPath(fn: Array[PointOfInterest] => Array[PointOfInterest])
-                          (path: List[(Int, Int)], node: Node): Node =
+                          (path: Array[(Int, Int)], node: Node): Node =
     path match {
-      case head +: Nil => {
+      case Array(head) => {
         val (latIndex, longIndex) = head
         val leaf = {
           if (children(latIndex).isDefinedAt(longIndex))
@@ -82,7 +82,7 @@ protected final case class Node(
         }
         nodeItemUpdate(node, latIndex, longIndex, leaf.copy(fn(leaf.locations)))
       }
-      case head +: tail => {
+      case Array(head, tail@_*) => {
         val (latIndex, longIndex) = head
         val subNode = {
           if (node.children(latIndex).isDefinedAt(longIndex))
@@ -92,13 +92,13 @@ protected final case class Node(
             }
           else Node()
         }
-        nodeItemUpdate(node, latIndex, longIndex, updateAtPath(fn)(tail, subNode))
+        nodeItemUpdate(node, latIndex, longIndex, updateAtPath(fn)(tail.toArray, subNode))
       }
     }
 
-  def insertAtPath(item: PointOfInterest, path: List[(Int, Int)], node: Node = this): Node =
+  def insertAtPath(item: PointOfInterest, path: Array[(Int, Int)], node: Node = this): Node =
     updateAtPath(_ :+ item)(path, node)
 
-  def removeAtPath(item: PointOfInterest, path: List[(Int, Int)], node: Node = this): Node =
+  def removeAtPath(item: PointOfInterest, path: Array[(Int, Int)], node: Node = this): Node =
     updateAtPath(_.filter(_ != item))(path, node)
 }

@@ -32,14 +32,13 @@ case class Damysos(private val geoTrie: Node = Node()) {
       .padTo(TreeDepth, '0')
       .reverse
 
-  private def makePath(amplitude: Int, coordinate: Double): List[Int] =
+  private def makePath(amplitude: Int, coordinate: Double): Array[Int] =
     toPaddedBase(TreeBreadth, coordinate + amplitude)
       .toCharArray
-      .map(_.toString.toInt)
-      .toList
+      .map(_.toInt - 48)
 
   // Make a GeoTrie path based on a set of coordinates
-  private def latLongPath(coordinates: Coordinates): List[(Int, Int)] =
+  private def latLongPath(coordinates: Coordinates): Array[(Int, Int)] =
     makePath(LatitudeAmp, coordinates.latitude) zip makePath(LongitudeAmp, coordinates.longitude)
 
   def toArray: Array[PointOfInterest] = geoTrie.toArray
