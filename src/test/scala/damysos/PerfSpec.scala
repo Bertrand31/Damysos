@@ -16,11 +16,14 @@ class PerfSpec extends FlatSpec {
 
   "Damysos search" should "be orders or magnitude faster then a naive linear search" in {
     val cities = PointOfInterest.loadFromCSV("world_cities.csv").toList
-    val augmentedData = (0 to 60).flatMap(i =>
+    val augmentedData = cities ++ (0 to 35).flatMap(i =>
       cities.map(poi =>
-        poi.copy(
-          name = poi.name + i,
-          coordinates = Coordinates(Random.between(-90, 90), Random.between(-180, 180))
+        PointOfInterest(
+          poi.name + i,
+          Coordinates(
+            Random.between(-90000, 90000) / 1000d,
+            Random.between(-180000, 180000) / 1000d,
+          ),
         )
       )
     )
@@ -34,14 +37,14 @@ class PerfSpec extends FlatSpec {
     val damysosTime = PerfUtils.profile("Damysos search") {
       res2 = damysos.findSurrounding(singapore)
     }
-    println(res2.map(_.name).mkString(", "))
+    println(res2.map(_.name).toList)
 
     var res1 = List[PointOfInterest]()
     val augmentedDataList = augmentedData.toList
     val linearTime = PerfUtils.profile("Linear search") {
       res1 = linearSearch(augmentedDataList, singapore)
     }
-    println(res1.map(_.name).mkString(", "))
+    println(res1.map(_.name).toList)
     val timesFaster = linearTime / damysosTime
     println(s"$timesFaster times faster")
     assert(timesFaster > 1000)
