@@ -33,28 +33,26 @@ protected final case class Node(
 
   @tailrec
   def findLeaf(path: Array[(Int, Int)], trie: GeoTrie = this): Option[GeoTrie] =
-    path match {
-      case Array(head) =>
-        trie match {
-          case Node(children) => {
-            val (latIndex, longIndex) = head
-            if (children(latIndex).isDefinedAt(longIndex))
-              Some(children(latIndex)(longIndex))
-            else None
-          }
-          case _ => None
+    if (path.length == 1)
+      trie match {
+        case Node(children) => {
+          val (latIndex, longIndex) = path.head
+          if (children(latIndex).isDefinedAt(longIndex))
+            Some(children(latIndex)(longIndex))
+          else None
         }
-      case Array(head, tail@_*) =>
-        trie match {
-          case Node(children) => {
-            val (latIndex, longIndex) = head
-            if (children(latIndex).isDefinedAt(longIndex))
-              findLeaf(tail.toArray, children(latIndex)(longIndex))
-            else None
-          }
-          case _ => None
+        case _ => None
+      }
+    else
+      trie match {
+        case Node(children) => {
+          val (latIndex, longIndex) = path.head
+          if (children(latIndex).isDefinedAt(longIndex))
+            findLeaf(path.tail, children(latIndex)(longIndex))
+          else None
         }
-    }
+        case _ => None
+      }
 
   // Helper function to update a node's child at the given coordinates.
   private def nodeItemUpdate(node: Node, latIndex: Int, longIndex: Int, item: GeoTrie): Node =
@@ -69,31 +67,28 @@ protected final case class Node(
   // at the end of that path (or the Leaf it created there, if the path didn't exist fully).
   private def updateAtPath(fn: Array[PointOfInterest] => Array[PointOfInterest])
                           (path: Array[(Int, Int)], node: Node): Node =
-    path match {
-      case Array(head) => {
-        val (latIndex, longIndex) = head
-        val leaf = {
-          if (children(latIndex).isDefinedAt(longIndex))
-            node.children(latIndex)(longIndex) match {
-              case leaf: Leaf => leaf
-              case _ => Leaf()
-            }
-          else Leaf()
-        }
-        nodeItemUpdate(node, latIndex, longIndex, leaf.copy(fn(leaf.locations)))
+    if (path.length == 1) {
+      val (latIndex, longIndex) = path.head
+      val leaf = {
+        if (children(latIndex).isDefinedAt(longIndex))
+          node.children(latIndex)(longIndex) match {
+            case leaf: Leaf => leaf
+            case _ => Leaf()
+          }
+        else Leaf()
       }
-      case Array(head, tail@_*) => {
-        val (latIndex, longIndex) = head
-        val subNode = {
-          if (node.children(latIndex).isDefinedAt(longIndex))
-            node.children(latIndex)(longIndex) match {
-              case node: Node => node
-              case _ => Node()
-            }
-          else Node()
-        }
-        nodeItemUpdate(node, latIndex, longIndex, updateAtPath(fn)(tail.toArray, subNode))
+      nodeItemUpdate(node, latIndex, longIndex, leaf.copy(fn(leaf.locations)))
+    } else {
+      val (latIndex, longIndex) = path.head
+      val subNode = {
+        if (node.children(latIndex).isDefinedAt(longIndex))
+          node.children(latIndex)(longIndex) match {
+            case node: Node => node
+            case _ => Node()
+          }
+        else Node()
       }
+      nodeItemUpdate(node, latIndex, longIndex, updateAtPath(fn)(path.tail, subNode))
     }
 
   def insertAtPath(item: PointOfInterest, path: Array[(Int, Int)], node: Node = this): Node =
