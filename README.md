@@ -57,23 +57,23 @@ this case a Trie, _is_ the logic.
 ## Performance
 
 Here are the results of running the `PerfSpec` class on a laptop with an
-_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **6 567 219** points:
+_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **7 854 909** points:
 ```text
 ============================
 Profiling Damysos search:
-Cold run        36 060 ns
-Max hot         29 803 ns
-Min hot         1 357 ns
-Med hot         1 488 ns
+Cold run        34 846 ns
+Max hot         36 495 ns
+Min hot         751 ns
+Med hot         787 ns
 
 ============================
 Profiling Linear search:
-Cold run        55 652 544 ns
-Max hot         55 673 863 ns
-Min hot         41 063 697 ns
-Med hot         41 468 949 ns
+Cold run        63 164 933 ns
+Max hot         59 330 782 ns
+Min hot         49 904 158 ns
+Med hot         50 231 196 ns
 
-27868 times faster
+63826 times faster
 ```
 As you can see, it is orders of magnitude faster than a linear search. This is because the Damysos
 trie has a fixed height ; the amount of data we add to it has no influence over its depth or
