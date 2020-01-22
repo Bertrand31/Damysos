@@ -26,9 +26,9 @@ class DamysosSpec extends FlatSpec {
   it should "store points correctly" in {
 
     PerfUtils.time[Unit]("Checking French Damysos integirty") {
-      val fake = PointOfInterest("fake city", Coordinates(2.3522219, 48.856614))
+      val fake = PointOfInterest("fake city", Coordinates(2.3522219f, 48.856614f))
       assert(!(damysosFrance contains fake)) // The coordinates exist, but with a different name
-      val nonExistant = PointOfInterest("I do not exist", Coordinates(-0.380752, 47.501715))
+      val nonExistant = PointOfInterest("I do not exist", Coordinates(-0.380752f, 47.501715f))
       assert(!(damysosFrance contains nonExistant)) // All properties of this PIO are inexistant
       PointOfInterest.loadFromCSV("france_cities.csv").foreach(item => {
         assert(damysosFrance contains item)
@@ -45,13 +45,13 @@ class DamysosSpec extends FlatSpec {
   it should "find the neighboring points" in {
 
     val franceMatches = PerfUtils.time[Array[PointOfInterest]]("Searching in France dataset") {
-      val parisCoordinates = Coordinates(2.3522219, 48.856614)
+      val parisCoordinates = Coordinates(2.3522219f, 48.856614f)
       damysosFrance.findSurrounding(parisCoordinates)
     }
     assert(franceMatches.size === 91)
 
     val worldMatches = PerfUtils.time[Array[PointOfInterest]]("Searching in World dataset") {
-      val singaporeCoordinates = Coordinates(1.28967, 103.85007)
+      val singaporeCoordinates = Coordinates(1.28967f, 103.85007f)
       damysosWorld.findSurrounding(singaporeCoordinates, 5)
     }
     assert(worldMatches.size === 13)
@@ -65,8 +65,8 @@ class DamysosSpec extends FlatSpec {
 
   it should "return a list of all the contents" in {
 
-    val paris = PointOfInterest("Paris", Coordinates(2.3522219, 48.856614))
-    val singapore = PointOfInterest("Singapore", Coordinates(1.28967, 103.85007))
+    val paris = PointOfInterest("Paris", Coordinates(2.3522219f, 48.856614f))
+    val singapore = PointOfInterest("Singapore", Coordinates(1.28967f, 103.85007f))
     val data = Seq(paris, singapore)
     val tempDamysos = Damysos() ++ data
     tempDamysos.toArray should contain theSameElementsAs data
@@ -86,7 +86,7 @@ class DamysosSpec extends FlatSpec {
   }
 
   it should "remove an element" in {
-    val paris = PointOfInterest("Paris", Coordinates(2.3522219, 48.856614))
+    val paris = PointOfInterest("Paris", Coordinates(2.3522219f, 48.856614f))
     val tempDamysos = Damysos() + paris
     assert(tempDamysos.size === 1)
     val emptyDamysos = tempDamysos - paris
@@ -94,8 +94,8 @@ class DamysosSpec extends FlatSpec {
   }
 
   it should "remove multiple elements" in {
-    val paris = PointOfInterest("Paris", Coordinates(2.3522219, 48.856614))
-    val singapore = PointOfInterest("Singapore", Coordinates(1.28967, 103.85007))
+    val paris = PointOfInterest("Paris", Coordinates(2.3522219f, 48.856614f))
+    val singapore = PointOfInterest("Singapore", Coordinates(1.28967f, 103.85007f))
     val data = Seq(paris, singapore)
     val tempDamysos = Damysos() ++ data
     assert(tempDamysos.size === 2)

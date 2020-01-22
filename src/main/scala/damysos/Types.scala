@@ -1,8 +1,8 @@
 package damysos
 
 case class Coordinates(
-  latitude: Double,
-  longitude: Double,
+  latitude: Float,
+  longitude: Float,
 )
 
 case class PointOfInterest(
@@ -14,7 +14,7 @@ object PointOfInterest {
 
   private def arrayToPIO(arr: Array[String]): PointOfInterest = {
     val Array(name, latitude, longitude) = arr
-    PointOfInterest(name, Coordinates(latitude.toDouble, longitude.toDouble))
+    PointOfInterest(name, Coordinates(latitude.toFloat, longitude.toFloat))
   }
 
   def loadFromCSV(filename: String): Iterator[PointOfInterest] =

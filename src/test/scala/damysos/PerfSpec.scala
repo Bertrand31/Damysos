@@ -16,20 +16,20 @@ class PerfSpec extends FlatSpec {
 
   "Damysos search" should "be orders or magnitude faster then a naive linear search" in {
     val cities = PointOfInterest.loadFromCSV("world_cities.csv").toList
-    val augmentedData = cities ++ (0 to 2).flatMap(i =>
+    val augmentedData = cities ++ (0 to 180).flatMap(i =>
       cities.map(poi =>
         PointOfInterest(
           poi.name + i,
           Coordinates(
-            Random.between(-90000, 90000) / 1000d,
-            Random.between(-180000, 180000) / 1000d,
+            Random.between(-90000, 90000) / 1000f,
+            Random.between(-180000, 180000) / 1000f,
           ),
         )
       )
     )
     println(s"Items in dataset: ${augmentedData.length}")
 
-    val singapore = Coordinates(1.28967, 103.85007)
+    val singapore = Coordinates(1.28967f, 103.85007f)
 
     val damysos = Damysos(maxPrecision=Some(6)) ++ augmentedData
 
