@@ -57,7 +57,7 @@ this case a Trie, _is_ the logic.
 ## Performance
 
 Here are the results of running the `PerfSpec` class on a laptop with an
-_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **23 435 958** points:
+_Intel Core i7-1065G7 CPU @ 1.30GHz_ CPU on a dataset of **23 435 958** points:
 ```text
 ============================
 Profiling Damysos search:
