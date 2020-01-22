@@ -15,13 +15,9 @@ private object Constants {
   val GPSDecimals = 6
 }
 
-case class Damysos(private val geoTrie: Node = Node()) {
+case class Damysos(maxPrecision: Int, private val pathDepth: Int, private val geoTrie: Node) {
 
   import Constants._
-
-  // 360 is the maximum value a GPS coordinate can take. So it is the trie depth we need.
-  private val TreeDepth =
-    MathUtils.toBase(TreeBreadth, MaxCoordinateValue * Math.pow(10, GPSDecimals).toLong).length
 
   // Returns an `TreeDepth`-characters-long base-`TreeBreadth` number as a String
   private def toPaddedBase(base: Int, number: Double): String =
@@ -29,11 +25,12 @@ case class Damysos(private val geoTrie: Node = Node()) {
       .reverse
       // We need to pad the numbers to ensure all the paths have the same length i.e. all of the
       // trie's leaves are on the same level: at the edges of the 3-simplex the GeoTrie is).
-      .padTo(TreeDepth, '0')
+      .padTo(pathDepth, '0')
       .reverse
 
   private def makePath(amplitude: Int, coordinate: Double): Array[Int] =
     toPaddedBase(TreeBreadth, coordinate + amplitude)
+      .take(maxPrecision)
       .toCharArray
       .map(_.toInt - 48)
 
@@ -55,6 +52,7 @@ case class Damysos(private val geoTrie: Node = Node()) {
                       precision: Int = DefaultSearchPrecision): Array[PointOfInterest] =
     geoTrie.findLeaf(latLongPath(coordinates) take precision) match {
       case Some(node: Node) => node.toArray
+      case Some(leaf: Leaf) => leaf.locations
       case _                => Array()
     }
 
@@ -69,4 +67,19 @@ case class Damysos(private val geoTrie: Node = Node()) {
     this.copy(geoTrie=geoTrie.removeAtPath(item, latLongPath(item.coordinates)))
 
   def --(items: IterableOnce[PointOfInterest]): Damysos = items.iterator.foldLeft(this)(_ - _)
+}
+
+object Damysos {
+
+  import Constants._
+
+  def apply(maxPrecision: Option[Int] = None): Damysos = {
+    // 360 is the maximum value a GPS coordinate can take. So it is the trie depth we need.
+    val pathDepth = MathUtils.toBase(TreeBreadth, MaxCoordinateValue * Math.pow(10, GPSDecimals).toLong).length
+    Damysos(
+      maxPrecision=maxPrecision.getOrElse(pathDepth),
+      pathDepth=pathDepth,
+      geoTrie=Node(),
+    )
+  }
 }

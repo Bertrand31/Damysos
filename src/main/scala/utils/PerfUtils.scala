@@ -29,7 +29,7 @@ object PerfUtils {
 
 
     print_result("Cold run", runtimes.head)
-    val sortedHotRuns = runtimes.drop(Math.floor(runtimes.length / 2).toInt).sorted
+    val sortedHotRuns = runtimes.takeRight(runtimes.length / 4).sorted
     print_result("Max hot", sortedHotRuns.last)
     print_result("Min hot", sortedHotRuns.head)
     val median = sortedHotRuns(Math.floor(sortedHotRuns.length / 2).toInt)
