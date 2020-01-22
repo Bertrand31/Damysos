@@ -57,14 +57,14 @@ this case a Trie, _is_ the logic.
 ## Performance
 
 Here are the results of running the `PerfSpec` class on a laptop with an
-_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **7 854 909** points:
+_Intel Core i7-7700HQ @ 2.80GHz_ CPU on a dataset of **23 435 958** points:
 ```text
 ============================
 Profiling Damysos search:
-Cold run        25 389 ns
-Max hot         32 360 ns
-Min hot         609 ns
-Med hot         646 ns
+Cold run        35 921 ns
+Max hot         31 867 ns
+Min hot         477 ns
+Med hot         498 ns
 
 ============================
 Profiling Linear search:
