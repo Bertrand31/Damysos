@@ -5,10 +5,10 @@ import utils.StringUtils._
 
 private object Constants {
 
-  val LatitudeAmp = 90 // Latitude spans from -90 (90N) to 90 (90S)
-  val LongitudeAmp = 180 // Longitude spans from -180 (180W) to 180 (180E)
-  val MaxCoordinateValue: Long = Math.max(LatitudeAmp, LongitudeAmp) * 2
-  val DefaultSearchPrecision = 6
+  val LatitudeAmp              = 90 // Latitude spans from -90 (90N) to 90 (90S)
+  val LongitudeAmp             = 180 // Longitude spans from -180 (180W) to 180 (180E)
+  val MaxCoordinateValue       = Math.max(LatitudeAmp, LongitudeAmp) * 2
+  val DefaultSearchPrecision   = 6
 
   // The lower the breadth, the deeper the tree and thus, the more precision levels available.
   // Whatever breadth we use, that will be the base in which we encode the coordinates.
@@ -25,7 +25,7 @@ case class Damysos(maxPrecision: Int, private val pathDepth: Int, private val ge
     MathUtils.toBase(base, Math.round(number * Math.pow(10, GPSDecimals).toLong))
       // We need to pad the numbers to ensure all the paths have the same length i.e. all of the
       // trie's leaves are on the same level: at the edges of the 3-simplex the GeoTrie is).
-      .padLeft(pathDepth, '0')
+      .padLeft(pathDepth, '0') // This method comes from StringUtils
 
   private def makePath(amplitude: Int, coordinate: Double): Array[Int] =
     toPaddedBase(TreeBreadth, coordinate + amplitude)
@@ -72,13 +72,15 @@ object Damysos {
 
   import Constants._
 
-  def apply(maxPrecision: Option[Int] = None): Damysos = {
-    // 360 is the maximum value a GPS coordinate can take. So it is the trie depth we need.
-    val pathDepth = MathUtils.toBase(TreeBreadth, MaxCoordinateValue * Math.pow(10, GPSDecimals).toLong).length
+  private val PathDepth = {
+    val maxCoordinateValue = MaxCoordinateValue * Math.pow(10, GPSDecimals).toLong
+    MathUtils.toBase(TreeBreadth, maxCoordinateValue).length
+  }
+
+  def apply(maxPrecision: Option[Int] = None): Damysos =
     Damysos(
-      maxPrecision=maxPrecision.getOrElse(pathDepth),
-      pathDepth=pathDepth,
+      maxPrecision=maxPrecision.getOrElse(PathDepth),
+      pathDepth=PathDepth,
       geoTrie=Node(),
     )
-  }
 }
