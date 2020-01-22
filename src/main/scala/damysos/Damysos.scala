@@ -5,10 +5,10 @@ import utils.StringUtils._
 
 private object Constants {
 
-  val LatitudeAmp              = 90 // Latitude spans from -90 (90N) to 90 (90S)
-  val LongitudeAmp             = 180 // Longitude spans from -180 (180W) to 180 (180E)
-  val MaxCoordinateValue       = Math.max(LatitudeAmp, LongitudeAmp) * 2
-  val DefaultSearchPrecision   = 6
+  val LatitudeAmp            = 90 // Latitude spans from -90 (90N) to 90 (90S)
+  val LongitudeAmp           = 180 // Longitude spans from -180 (180W) to 180 (180E)
+  val MaxCoordinateValue     = Math.max(LatitudeAmp, LongitudeAmp) * 2
+  val DefaultSearchPrecision = 6
 
   // The lower the breadth, the deeper the tree and thus, the more precision levels available.
   // Whatever breadth we use, that will be the base in which we encode the coordinates.
