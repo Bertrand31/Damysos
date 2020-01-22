@@ -4,5 +4,8 @@ import java.lang.{Long => JavaLong}
 
 object MathUtils {
 
-  def toBase(base: Int, number: Int): String = JavaLong.toString(number, base)
+  implicit class IntImprovements(val i: Int) {
+
+    def toBase: Int => String = JavaLong.toString(i, _)
+  }
 }

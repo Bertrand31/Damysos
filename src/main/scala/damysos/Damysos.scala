@@ -1,6 +1,6 @@
 package damysos
 
-import utils.MathUtils
+import utils.MathUtils._
 import utils.StringUtils._
 
 private object Constants {
@@ -22,7 +22,8 @@ case class Damysos(maxPrecision: Int, private val pathDepth: Int, private val ge
 
   // Returns an `TreeDepth`-characters-long base-`TreeBreadth` number as a String
   private def toPaddedBase(base: Int, number: Float): String =
-    MathUtils.toBase(base, Math.round(number * Math.pow(10, GPSDecimals).toInt))
+    Math.round(number * Math.pow(10, GPSDecimals).toInt)
+      .toBase(base)
       // We need to pad the numbers to ensure all the paths have the same length i.e. all of the
       // trie's leaves are on the same level: at the edges of the 3-simplex the GeoTrie is).
       .padLeft(pathDepth, '0') // This method comes from StringUtils
@@ -73,7 +74,7 @@ object Damysos {
 
   private val PathDepth = {
     val maxCoordinateValue = MaxCoordinateValue * Math.pow(10, GPSDecimals).toInt
-    MathUtils.toBase(TreeBreadth, maxCoordinateValue).length
+    maxCoordinateValue.toBase(TreeBreadth).length
   }
 
   def apply(maxPrecision: Option[Int] = None): Damysos =
