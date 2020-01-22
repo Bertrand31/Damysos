@@ -61,10 +61,10 @@ _Intel Core i7-1065G7 CPU @ 1.30GHz_ CPU on a dataset of **23 435 958** points:
 ```text
 ============================
 Profiling Damysos search:
-Cold run        35 921 ns
-Max hot         31 867 ns
-Min hot         477 ns
-Med hot         498 ns
+Cold run        24 142 ns
+Max hot         34 109 ns
+Min hot         363 ns
+Med hot         392 ns
 
 ============================
 Profiling Linear search:
@@ -73,7 +73,7 @@ Max hot         59 330 782 ns
 Min hot         49 904 158 ns
 Med hot         50 231 196 ns
 
-77757 times faster
+128140 times faster
 ```
 As you can see, it is orders of magnitude faster than a linear search. This is because the Damysos
 trie has a fixed height ; the amount of data we add to it has no influence over its depth or
