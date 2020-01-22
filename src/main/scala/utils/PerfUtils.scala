@@ -1,5 +1,7 @@
 package utils
 
+import java.text.NumberFormat
+
 object PerfUtils {
 
   def time[A](id: String)(block: => A): A = {
@@ -12,8 +14,9 @@ object PerfUtils {
   }
 
   def profile(id: String)(block: => Any): Long = {
-    def print_result(s: String, ns: Long): Unit = {
-      val format = java.text.NumberFormat.getIntegerInstance.format(_: Long)
+
+    def printResult(s: String, ns: Long): Unit = {
+      val format = NumberFormat.getIntegerInstance.format(_: Long)
       println(s.padTo(16, " ").mkString + format(ns) + " ns")
     }
 
@@ -28,12 +31,12 @@ object PerfUtils {
     println(s"Profiling $id:")
 
 
-    print_result("Cold run", runtimes.head)
+    printResult("Cold run", runtimes.head)
     val sortedHotRuns = runtimes.takeRight(runtimes.length / 4).sorted
-    print_result("Max hot", sortedHotRuns.last)
-    print_result("Min hot", sortedHotRuns.head)
+    printResult("Max hot", sortedHotRuns.last)
+    printResult("Min hot", sortedHotRuns.head)
     val median = sortedHotRuns(Math.floor(sortedHotRuns.length / 2).toInt)
-    print_result("Med hot", median)
+    printResult("Med hot", median)
     median
   }
 }

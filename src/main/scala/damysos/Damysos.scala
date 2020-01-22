@@ -58,14 +58,13 @@ case class Damysos(maxPrecision: Int, private val pathDepth: Int, private val ge
   def +(item: PointOfInterest): Damysos =
     this.copy(geoTrie=geoTrie.insertAtPath(item, latLongPath(item.coordinates)))
 
-  // IterableOnce encompasses both normal collections and Iterator. So this method can be used
-  // either with a normal collection or a lazy one, like reading from a file line by line.
-  def ++(items: IterableOnce[PointOfInterest]): Damysos = items.iterator.foldLeft(this)(_ + _)
+  // IterableOnce encompasses both strict and lazy collections.
+  def `++`: IterableOnce[PointOfInterest] => Damysos = _.iterator.foldLeft(this)(_ + _)
 
   def -(item: PointOfInterest): Damysos =
     this.copy(geoTrie=geoTrie.removeAtPath(item, latLongPath(item.coordinates)))
 
-  def --(items: IterableOnce[PointOfInterest]): Damysos = items.iterator.foldLeft(this)(_ - _)
+  def `--`: IterableOnce[PointOfInterest] => Damysos = _.iterator.foldLeft(this)(_ - _)
 }
 
 object Damysos {
