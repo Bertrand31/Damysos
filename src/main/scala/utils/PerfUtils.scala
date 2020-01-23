@@ -1,3 +1,5 @@
+// scalastyle:off
+
 package utils
 
 import java.text.NumberFormat

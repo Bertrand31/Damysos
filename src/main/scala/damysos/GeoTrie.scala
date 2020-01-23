@@ -1,6 +1,7 @@
 package damysos
 
 import scala.annotation.tailrec
+import cats.implicits._
 import Constants._
 
 protected sealed trait GeoTrie
@@ -13,8 +14,8 @@ protected final case class Node(
     children.foldLeft(Array[PointOfInterest]())((acc, arr) =>
       arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
-          case node: Node      => acc2 ++ node.toArray
-          case Leaf(locations) => acc2 ++ locations
+          case node: Node      => acc2 concat node.toArray
+          case Leaf(locations) => acc2 concat locations
           case _               => acc2
         }
       )
@@ -24,8 +25,8 @@ protected final case class Node(
     children.foldLeft(0)((acc, arr) =>
       arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
-          case node: Node     => acc2 + node.size
-          case Leaf(location) => acc2 + location.size
+          case node: Node     => acc2 |+| node.size
+          case Leaf(location) => acc2 |+| location.size
           case _              => acc2
         }
       )
@@ -67,13 +68,13 @@ protected final case class Node(
   // at the end of that path (or the Leaf it created there, if the path didn't exist fully).
   private def updateAtPath(fn: Array[PointOfInterest] => Array[PointOfInterest])
                           (path: Array[(Int, Int)], node: Node): Node =
-    if (path.length == 1) {
+    if (path.length === 1) {
       val (latIndex, longIndex) = path.head
       val leaf = {
         if (children(latIndex).isDefinedAt(longIndex))
           node.children(latIndex)(longIndex) match {
             case leaf: Leaf => leaf
-            case _ => Leaf()
+            case _          => Leaf()
           }
         else Leaf()
       }
@@ -84,7 +85,7 @@ protected final case class Node(
         if (node.children(latIndex).isDefinedAt(longIndex))
           node.children(latIndex)(longIndex) match {
             case node: Node => node
-            case _ => Node()
+            case _          => Node()
           }
         else Node()
       }
