@@ -68,12 +68,12 @@ Med hot         392 ns
 
 ============================
 Profiling Linear search:
-Cold run        63 164 933 ns
-Max hot         59 330 782 ns
-Min hot         49 904 158 ns
-Med hot         50 231 196 ns
+Cold run        189 494 799 ns
+Max hot         177 992 346 ns
+Min hot         149 712 474 ns
+Med hot         150 693 588 ns
 
-128140 times faster
+384422 times faster
 ```
 As you can see, it is orders of magnitude faster than a linear search. This is because the Damysos
 trie has a fixed height ; the amount of data we add to it has no influence over its depth or
