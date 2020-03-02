@@ -5,13 +5,13 @@ import cats.implicits._
 import Constants._
 
 protected sealed trait GeoTrie
-protected final case class Leaf(locations: Array[PointOfInterest] = Array()) extends GeoTrie
+protected final case class Leaf(locations: Array[PointOfInterest] = Array.empty) extends GeoTrie
 protected final case class Node(
   private val children: Array[Array[GeoTrie]] = Array.fill(TreeBreadth)(Array.ofDim(TreeBreadth)),
 ) extends GeoTrie {
 
   def toArray: Array[PointOfInterest] =
-    children.foldLeft(Array[PointOfInterest]())((acc, arr) =>
+    children.foldLeft(Array.empty[PointOfInterest])((acc, arr) =>
       arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
           case node: Node      => acc2 concat node.toArray

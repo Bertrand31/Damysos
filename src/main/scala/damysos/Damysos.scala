@@ -7,7 +7,7 @@ private object Constants {
 
   val LatitudeAmp            = 90 // Latitude spans from -90 (90N) to 90 (90S)
   val LongitudeAmp           = 180 // Longitude spans from -180 (180W) to 180 (180E)
-  val MaxCoordinateValue     = Math.max(LatitudeAmp, LongitudeAmp) * 2
+  val MaxCoordinateValue     = (LatitudeAmp max LongitudeAmp) * 2
   val DefaultSearchPrecision = 6
 
   // The lower the breadth, the deeper the tree and thus, the more precision levels available.
@@ -40,7 +40,7 @@ case class Damysos(maxPrecision: Int, private val pathDepth: Int, private val ge
 
   def toArray: Array[PointOfInterest] = geoTrie.toArray
 
-  lazy val size: Int = geoTrie.size
+  def size: Int = geoTrie.size
 
   def contains(point: PointOfInterest): Boolean =
     geoTrie.findLeaf(latLongPath(point.coordinates)) match {
@@ -72,14 +72,14 @@ object Damysos {
 
   import Constants._
 
-  private val PathDepth = {
+  private val PathDepth: Int = {
     val maxCoordinateValue = MaxCoordinateValue * Math.pow(10, GPSDecimals).toInt
     maxCoordinateValue.toBase(TreeBreadth).length
   }
 
-  def apply(maxPrecision: Option[Int] = None): Damysos =
+  def apply(maxPrecision: Int = PathDepth): Damysos =
     Damysos(
-      maxPrecision=maxPrecision.getOrElse(PathDepth),
+      maxPrecision=maxPrecision,
       pathDepth=PathDepth,
       geoTrie=Node(),
     )

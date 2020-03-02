@@ -20,6 +20,6 @@ object PointOfInterest {
   def loadFromCSV(filename: String): Iterator[PointOfInterest] =
     scala.io.Source.fromResource(filename)
       .getLines
-      .map(_.split(";"))
+      .map(_ split ';')
       .map(arrayToPIO)
 }
