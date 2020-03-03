@@ -31,7 +31,7 @@ class PerfSpec extends FlatSpec {
 
     val singapore = Coordinates(1.28967f, 103.85007f)
 
-    val damysos = Damysos(maxPrecision=Some(6)) ++ augmentedData
+    val damysos = Damysos(maxPrecision=6) ++ augmentedData
 
     var res2 = Array[PointOfInterest]()
     val damysosTime = PerfUtils.profile("Damysos search") {

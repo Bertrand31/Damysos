@@ -53,7 +53,7 @@ case class Damysos(maxPrecision: Int, private val pathDepth: Int, private val ge
     geoTrie.findLeaf(latLongPath(coordinates) take precision) match {
       case Some(node: Node) => node.toArray
       case Some(leaf: Leaf) => leaf.locations
-      case _                => Array()
+      case _                => Array.empty
     }
 
   def +(item: PointOfInterest): Damysos =
