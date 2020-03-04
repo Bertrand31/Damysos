@@ -21,7 +21,7 @@ protected final case class Node(
       )
     )
 
-  lazy val size: Int =
+  def size: Int =
     children.foldLeft(0)((acc, arr) =>
       arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
