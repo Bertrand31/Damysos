@@ -25,8 +25,8 @@ protected final case class Node(
     children.foldLeft(0)((acc, arr) =>
       arr.foldLeft(acc)((acc2, geoTrie) =>
         geoTrie match {
-          case node: Node     => acc2 |+| node.size
-          case Leaf(location) => acc2 |+| location.size
+          case node: Node     => acc2 + node.size
+          case Leaf(location) => acc2 + location.size
           case _              => acc2
         }
       )

@@ -22,7 +22,7 @@ case class Damysos(maxPrecision: Int, private val pathDepth: Int, private val ge
 
   // Returns an `TreeDepth`-characters-long base-`TreeBreadth` number as a String
   private def toPaddedBase(base: Int, number: Float): String =
-    Math.round(number * Math.pow(10, GPSDecimals).toInt)
+    math.round(number * math.pow(10, GPSDecimals))
       .toBase(base)
       // We need to pad the numbers to ensure all the paths have the same length so that all of the
       // trie's leaves are on the same level: at the edges of the 3-simplex the GeoTrie is).
