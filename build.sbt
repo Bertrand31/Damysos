@@ -2,15 +2,15 @@ name := "Damysos"
 
 version := "2"
 
-scalaVersion := "2.13.1"
+scalaVersion := "3.3.0"
 
 // SBT scoverage settings
 coverageMinimum := 95
 coverageFailOnMinimum := true
 
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "2.0.0",
-  "org.scalatest" %% "scalatest" % "3.0.8",
+  "org.typelevel" %% "cats-core" % "2.9.0",
+  "org.scalatest" %% "scalatest" % "3.2.16",
 )
 
 scalacOptions ++= Seq(
@@ -21,13 +21,6 @@ scalacOptions ++= Seq(
   "-language:higherKinds", // Allow higher-kinded types
   "-unchecked", // Enable additional warnings where generated code depends on assumptions
   // "-Xfatal-warnings", // Fail on warnings
-  "-Xlint:_", // Enable all available style warnings
-  "-Ywarn-macros:after", // Only inspect expanded trees when generating unused symbol warnings
-  "-Ywarn-unused:_", // Enables all unused warnings
-  "-Ywarn-value-discard", // Warn when non-Unit expression results are unused
-  // "-opt:l:inline",
-  // "-opt-inline-from:**",
-  // "-opt-warnings",
 )
 
 javaOptions ++= Seq(
