@@ -23,7 +23,7 @@ object PerfUtils {
     }
 
     var tmpTime = 0L
-    val runtimes = (0 to 50000).map(_ => {
+    val runtimes = (0 to 5000000).map(_ => {
       tmpTime = System.nanoTime
       block
       System.nanoTime - tmpTime

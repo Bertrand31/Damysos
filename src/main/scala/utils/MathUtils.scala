@@ -1,11 +1,11 @@
 package utils
 
-import java.lang.{Integer => JavaInt}
+import java.lang.{Long => JavaLong}
 
 object MathUtils {
 
-  implicit class IntImprovements(val i: Int) {
+  implicit class LongImprovements(val l: Long) {
 
-    def toBase: Int => String = JavaInt.toString(i, _)
+    val toBase: Int => String = JavaLong.toString(l, _)
   }
 }
